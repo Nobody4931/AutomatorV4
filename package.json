@@ -1,0 +1,25 @@
+{
+	"name": "automator_v4",
+	"version": "4.0.0",
+	"description": "hello!",
+	"type": "module",
+	"main": "src/main.js",
+	"scripts": {
+		"start": "node ."
+	},
+	"author": "Nobody4931",
+	"license": "UNLICENSED",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Nobody4931/AutomatorV4.git"
+	},
+	"dependencies": {
+		"axios": "^0.21.1",
+		"dotenv": "^10.0.0",
+		"ws": "^7.5.1"
+	},
+	"optionalDependencies": {
+		"bufferutil": "^4.0.3",
+		"utf-8-validate": "^5.0.5"
+	}
+}
