@@ -3,7 +3,6 @@ the coolest private discord management bot ever made \
 now using raw discord api
 
 ## todo
-* client api wrapper
 * guild api wrapper
 * channel api wrapper
 * slash commands api wrapper
