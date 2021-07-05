@@ -24,6 +24,7 @@ var MemberCallbacks  = [];
 var UserCallbacks    = [];
 //var BanCallbacks     = [];
 var EmojiCallbacks   = [];
+var EmojisCallback   = null;
 
 
 /* Save Functions */
@@ -154,6 +155,9 @@ export async function SaveEmoji(Data) {
 	// https://discord.com/developers/docs/resources/emoji#emoji-object
 	for (const Emoji in Emojis)
 		delete Emojis[Emoji];
+
+	Emojis._Loaded = false;
+
 	for (const Emoji of Data.emojis) {
 		if (Emojis[Emoji.name] != null)
 			throw "CONFLICTING_EMOJIS";
@@ -172,6 +176,10 @@ export async function SaveEmoji(Data) {
 			}
 		}
 	}
+
+	Emojis._Loaded = true;
+	if (EmojisCallback != null)
+		EmojisCallback();
 }
 
 /* Collection Functions */
@@ -230,8 +238,16 @@ export async function CollectUser(Filter) {
 export async function CollectEmoji(Filter) {
 	return new Promise((Resolve) => {
 		for (const Emoji of Object.values(Emojis))
-			if (Filter(Emoji) == true)
+			if (typeof Emoji == "object" && Filter(Emoji) == true)
 				return Resolve(Emoji);
 		EmojiCallbacks.push([ Filter, Resolve ]);
+	});
+}
+
+export async function CollectEmojis() {
+	return new Promise((Resolve) => {
+		if (Emojis._Loaded == true)
+			return Resolve();
+		EmojisCallback = Resolve;
 	});
 }
