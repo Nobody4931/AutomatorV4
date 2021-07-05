@@ -1,16 +1,24 @@
+import * as Options from "./config.js";
 import * as Socket from "./modules/api/socket.js";
+import * as Memory from "./modules/client/memory.js";
 import * as Dispatcher from "./modules/client/dispatcher.js";
 
-let StartingTime = null;
+let StartTime;
+let EndTime;
 
 Dispatcher.AddHandler("READY", async () => {
-	let EndingTime = performance.now();
+	EndTime = performance.now();
 
-	console.log(`client is ready`);
-	console.log(`took ${EndingTime - StartingTime} ms`);
+	await Memory.CollectClient();
+	await Memory.CollectGuild();
+
+	let Owner = await Memory.CollectUser((User) => (User.ID == Options.OwnerID));
+
+	console.log(`Successfully authenticated as: ${Memory.Client.Tag} (${Memory.Client.ID})\n`);
+	console.log(`Found guild to manage: ${Memory.Guild.Name} (${Memory.Guild.ID})`);
+	console.log(`Found owner: ${Owner.Tag} (${Owner.ID})\n`);
+	console.log(`Took ${EndTime - StartTime} ms`);
 });
 
-console.log("starting...");
-
-StartingTime = performance.now();
+StartTime = performance.now();
 Socket.Connect();

@@ -1,6 +1,8 @@
-// NOTE: IDs are strings because idk discords on drugs or something
+// NOTE: IDs are snowflakes (strings) because idk discords on drugs or something
 
 // TODO: might add bans later
+// 			* if so, disable ban/kick commands from other bots
+// 			* and also create custom ban/kick commands
 
 import * as DAPI from "../api/api.js";
 import * as HttpOP from "../api/enums/http.js";
@@ -14,13 +16,26 @@ export const Users    = {};
 //export const Bans     = {};
 export const Emojis   = {};
 
+var ClientCallback   = null;
+var GuildCallback    = null;
+var RoleCallbacks    = [];
+var ChannelCallbacks = [];
+var MemberCallbacks  = [];
+var UserCallbacks    = [];
+//var BanCallbacks     = [];
+var EmojiCallbacks   = [];
 
+
+/* Save Functions */
 export async function SaveClient(Data) {
 	// https://discord.com/developers/docs/resources/user#user-object
 	Client.ID = Data.id;
 	Client.Username = Data.username;
 	Client.Discriminator = Data.discriminator;
 	Client.Tag = `${Data.username}#${Data.discriminator}`;
+
+	if (ClientCallback != null)
+		ClientCallback();
 }
 
 export async function SaveGuild(Data) {
@@ -41,6 +56,9 @@ export async function SaveGuild(Data) {
 
 	if (Data.members != null) for (const Member of Data.members)
 		SaveMember(Member);
+
+	if (GuildCallback != null)
+		GuildCallback();
 }
 
 export async function SaveRole(Data) {
@@ -55,6 +73,13 @@ export async function SaveRole(Data) {
 	Roles[Data.id].Managed = Data.managed;
 	Roles[Data.id].BoostRole = Data.tags?.premium_subscriber ?? false;
 	Roles[Data.id].Permissions = parseInt(Data.permissions);
+
+	for (const I in RoleCallbacks) {
+		if (RoleCallbacks[I][0](Roles[Data.id]) == true) {
+			RoleCallbacks[I][1](Roles[Data.id]);
+			RoleCallbacks.splice(I, 1);
+		}
+	}
 }
 
 export async function SaveChannel(Data) {
@@ -75,6 +100,13 @@ export async function SaveChannel(Data) {
 		Overwrite.Deny = parseInt(OData.deny);
 		return Overwrite;
 	});
+
+	for (const I in ChannelCallbacks) {
+		if (ChannelCallbacks[I][0](Channels[Data.id]) == true) {
+			ChannelCallbacks[I][1](Channels[Data.id]);
+			ChannelCallbacks.splice(I, 1);
+		}
+	}
 }
 
 export async function SaveMember(Data) {
@@ -91,6 +123,13 @@ export async function SaveMember(Data) {
 	Members[Data.user.id].Deafened = Data.deaf ?? false;
 
 	SaveUser(Data.user);
+
+	for (const I in MemberCallbacks) {
+		if (MemberCallbacks[I][0](Members[Data.user.id]) == true) {
+			MemberCallbacks[I][1](Members[Data.user.id]);
+			MemberCallbacks.splice(I, 1);
+		}
+	}
 }
 
 export async function SaveUser(Data) {
@@ -102,6 +141,13 @@ export async function SaveUser(Data) {
 	Users[Data.id].Tag = `${Data.username}#${Data.discriminator}`;
 	Users[Data.id].Bot = Data.bot ?? false;
 	Users[Data.id].System = Data.system ?? false;
+
+	for (const I in UserCallbacks) {
+		if (UserCallbacks[I][0](Users[Data.id]) == true) {
+			UserCallbacks[I][1](Users[Data.id]);
+			UserCallbacks.splice(I, 1);
+		}
+	}
 }
 
 export async function SaveEmoji(Data) {
@@ -109,11 +155,83 @@ export async function SaveEmoji(Data) {
 	for (const Emoji in Emojis)
 		delete Emojis[Emoji];
 	for (const Emoji of Data.emojis) {
+		if (Emojis[Emoji.name] != null)
+			throw "CONFLICTING_EMOJIS";
+
 		Emojis[Emoji.name] = {};
 		Emojis[Emoji.name].ID = Emoji.id;
 		Emojis[Emoji.name].Name = Emoji.name;
 		Emojis[Emoji.name].Colons = Emoji.require_colons ?? false;
 		Emojis[Emoji.name].Animated = Emoji.animated ?? false;
 		Emojis[Emoji.name].Available = Emoji.available ?? false;
+
+		for (const I in EmojiCallbacks) {
+			if (EmojiCallbacks[I][0](Emojis[Emoji.name]) == true) {
+				EmojiCallbacks[I][1](Emojis[Emoji.name]);
+				EmojiCallbacks.splice(I, 1);
+			}
+		}
 	}
+}
+
+/* Collection Functions */
+export async function CollectClient() {
+	return new Promise((Resolve) => {
+		if (Client.ID != null)
+			return Resolve();
+		ClientCallback = Resolve;
+	});
+}
+
+export async function CollectGuild() {
+	return new Promise((Resolve) => {
+		if (Guild.ID != null)
+			return Resolve();
+		GuildCallback = Resolve;
+	});
+}
+
+export async function CollectRole(Filter) {
+	return new Promise((Resolve) => {
+		for (const Role of Object.values(Roles))
+			if (Filter(Role) == true)
+				return Resolve(Role);
+		RoleCallbacks.push([ Filter, Resolve ]);
+	});
+}
+
+export async function CollectChannel(Filter) {
+	return new Promise((Resolve) => {
+		for (const Channel of Object.values(Channels))
+			if (Filter(Channel) == true)
+				return Resolve(Channel);
+		ChannelCallbacks.push([ Filter, Resolve ]);
+	});
+}
+
+export async function CollectMember(Filter) {
+	return new Promise((Resolve) => {
+		for (const Member of Object.values(Members))
+			if (Filter(Member) == true)
+				return Resolve(Member);
+		MemberCallbacks.push([ Filter, Resolve ]);
+	});
+}
+
+export async function CollectUser(Filter) {
+	return new Promise((Resolve) => {
+		for (const User of Object.values(Users))
+			if (Filter(User) == true)
+				return Resolve(User);
+		UserCallbacks.push([ Filter, Resolve ]);
+	});
+}
+
+export async function CollectEmoji(Filter) {
+	return new Promise((Resolve) => {
+		for (const Emoji of Object.values(Emojis))
+			if (Filter(Emoji) == true)
+				return Resolve(Emoji);
+		EmojiCallbacks.push([ Filter, Resolve ]);
+	});
 }
