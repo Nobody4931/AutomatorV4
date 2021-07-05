@@ -1,7 +1,7 @@
 // https://discord.com/developers/docs/interactions/slash-commands
-import * as DAPI from "../api/api.js";
-import * as HttpOP from "../api/enums/http.js";
-import * as Options from "../../config.js";
+import * as DAPI from "../../api/api.js";
+import * as HttpOP from "../../api/enums/http.js";
+import * as Options from "../../../config.js";
 
 export async function GetGlobals(Data, Headers) {
 	let Response = await DAPI.GETRequestA(`applications/${Options.AppID}/commands`, Data, Headers);

@@ -1,6 +1,6 @@
 // https://discord.com/developers/docs/resources/channel
-import * as DAPI from "../api/api.js";
-import * as HttpOP from "../api/enums/http.js";
+import * as DAPI from "../../api/api.js";
+import * as HttpOP from "../../api/enums/http.js";
 
 export async function ModifyChannel(ChannelID, Data, Headers) {
 	let Response = await DAPI.PATCHRequestA(`channels/${ChannelID}`, Data, Headers);

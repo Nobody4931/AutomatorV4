@@ -1,7 +1,7 @@
 // https://discord.com/developers/docs/resources/guild
-import * as DAPI from "../api/api.js";
-import * as HttpOP from "../api/enums/http.js";
-import * as Options from "../../config.js";
+import * as DAPI from "../../api/api.js";
+import * as HttpOP from "../../api/enums/http.js";
+import * as Options from "../../../config.js";
 
 export async function ModifyGuild(Data, Headers) {
 	let Response = await DAPI.PATCHRequestA(`guilds/${Options.GuildID}`, Data, Headers);

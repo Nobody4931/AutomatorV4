@@ -2,7 +2,7 @@
 import * as DAPI from "./api.js";
 import * as Dispatcher from "../client/dispatcher.js";
 import * as Memory from "../client/memory.js";
-import * as Client from "../client/client.js";
+import * as Client from "../client/wrappers/client.js";
 import * as Options from "../../config.js";
 
 import * as GatewayOP from "./enums/gateway.js";

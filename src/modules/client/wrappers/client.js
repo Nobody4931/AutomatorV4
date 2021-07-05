@@ -1,6 +1,6 @@
 // https://discord.com/developers/docs/resources/user
-import * as DAPI from "../api/api.js";
-import * as HttpOP from "../api/enums/http.js";
+import * as DAPI from "../../api/api.js";
+import * as HttpOP from "../../api/enums/http.js";
 
 export async function LeaveGuild(GuildID, Data, Headers) {
 	let Response = await DAPI.DELETERequestA(`users/@me/guilds/${GuildID}`, Data, Headers);
