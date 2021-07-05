@@ -4,6 +4,8 @@ now using raw discord api
 
 ## todo
 * slash commands api wrapper
+* memory collector
+* message/reaction/interaction collector
 * the actual bot lol
 
 ## questions ive literally never been asked before
