@@ -6,6 +6,7 @@ now using raw discord api
 * put emoji loaded tag somewhere else
 * message/reaction/interaction collector
 * automatic command registration/handler
+* create datastore (or use mongo?)
 
 ## questions ive literally never been asked before
 
