@@ -20,3 +20,12 @@ export const REPLY                                        = 19;
 export const APPLICATION_COMMAND                          = 20;
 export const THREAD_STARTER_MESSAGE                       = 21;
 export const GUILD_INVITE_REMINDER                        = 22;
+
+export const FLAG_CROSSPOSTED            = (1 << 0);
+export const FLAG_IS_CROSSPOST           = (1 << 1);
+export const FLAG_SUPPRESS_EMBEDS        = (1 << 2);
+export const FLAG_SOURCE_MESSAGE_DELETED = (1 << 3);
+export const FLAG_URGENT                 = (1 << 4);
+export const FLAG_HAS_THREAD             = (1 << 5);
+export const FLAG_EPHEMERAL              = (1 << 6);
+export const FLAG_LOADING                = (1 << 7);
