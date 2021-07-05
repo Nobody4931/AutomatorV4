@@ -9,3 +9,7 @@ export const NOT_FOUND           = 404;
 export const METHOD_NOT_ALLOWED  = 405;
 export const TOO_MANY_REQUESTS   = 429;
 export const GATEWAY_UNAVAILABLE = 502;
+
+export function IsValidStatus(StatusCode) {
+	return (StatusCode == OK || StatusCode == CREATED || StatusCode == NO_CONTENT);
+}

@@ -5,60 +5,60 @@ import * as Options from "../../config.js";
 
 export async function GetGlobals(Data, Headers) {
 	let Response = await DAPI.GETRequestA(`applications/${Options.AppID}/commands`, Data, Headers);
-	if (Response.status != HttpOP.OK) throw `HTTP_ERROR: ${Response.statusText}`;
+	if (HttpOP.IsValidStatus(Response.status) == false) throw `HTTP_ERROR: ${Response.statusText}`;
 	return Response;
 }
 
 export async function GetGlobal(CommandID, Data, Headers) {
 	let Response = await DAPI.GETRequestA(`applications/${Options.AppID}/commands/${CommandID}`, Data, Headers);
-	if (Response.status != HttpOP.OK) throw `HTTP_ERROR: ${Response.statusText}`;
+	if (HttpOP.IsValidStatus(Response.status) == false) throw `HTTP_ERROR: ${Response.statusText}`;
 	return Response;
 }
 
 export async function CreateGlobal(Data, Headers) {
 	let Response = await DAPI.POSTRequestA(`applications/${Options.AppID}/commands`, Data, Headers);
-	if (Response.status != HttpOP.CREATED) throw `HTTP_ERROR: ${Response.statusText}`;
+	if (HttpOP.IsValidStatus(Response.status) == false) throw `HTTP_ERROR: ${Response.statusText}`;
 	return Response;
 }
 
 export async function EditGlobal(CommandID, Data, Headers) {
 	let Response = await DAPI.PATCHRequestA(`applications/${Options.AppID}/commands/${CommandID}`, Data, Headers);
-	if (Response.status != HttpOP.OK) throw `HTTP_ERROR: ${Response.statusText}`;
+	if (HttpOP.IsValidStatus(Response.status) == false) throw `HTTP_ERROR: ${Response.statusText}`;
 	return Response;
 }
 
 export async function DeleteGlobal(CommandID, Data, Headers) {
 	let Response = await DAPI.DELETERequestA(`applications/${Options.AppID}/commands/${CommandID}`, Data, Headers);
-	if (Response.status != HttpOP.NO_CONTENT) throw `HTTP_ERROR: ${Response.statusText}`;
+	if (HttpOP.IsValidStatus(Response.status) == false) throw `HTTP_ERROR: ${Response.statusText}`;
 	return Response;
 }
 
 export async function GetGuilds(Data, Headers) {
 	let Response = await DAPI.GETRequestA(`applications/${Options.AppID}/guilds/${Options.GuildID}/commands`, Data, Headers);
-	if (Response.status != HttpOP.OK) throw `HTTP_ERROR: ${Response.statusText}`;
+	if (HttpOP.IsValidStatus(Response.status) == false) throw `HTTP_ERROR: ${Response.statusText}`;
 	return Response;
 }
 
 export async function GetGuild(CommandID, Data, Headers) {
 	let Response = await DAPI.GETRequestA(`applications/${Options.AppID}/guilds/${Options.GuildID}/commands/${CommandID}`, Data, Headers);
-	if (Response.status != HttpOP.OK) throw `HTTP_ERROR: ${Response.statusText}`;
+	if (HttpOP.IsValidStatus(Response.status) == false) throw `HTTP_ERROR: ${Response.statusText}`;
 	return Response;
 }
 
 export async function CreateGuild(Data, Headers) {
 	let Response = await DAPI.POSTRequestA(`applications/${Options.AppID}/guilds/${Options.GuildID}/commands`, Data, Headers);
-	if (Response.status != HttpOP.CREATED) throw `HTTP_ERROR: ${Response.statusText}`;
+	if (HttpOP.IsValidStatus(Response.status) == false) throw `HTTP_ERROR: ${Response.statusText}`;
 	return Response;
 }
 
 export async function EditGuild(CommandID, Data, Headers) {
 	let Response = await DAPI.PATCHRequestA(`applications/${Options.AppID}/guilds/${Options.GuildID}/commands/${CommandID}`, Data, Headers);
-	if (Response.status != HttpOP.OK) throw `HTTP_ERROR: ${Response.statusText}`;
+	if (HttpOP.IsValidStatus(Response.status) == false) throw `HTTP_ERROR: ${Response.statusText}`;
 	return Response;
 }
 
 export async function DeleteGuild(CommandID, Data, Headers) {
 	let Response = await DAPI.DELETERequestA(`applications/${Options.AppID}/guilds/${Options.GuildID}/commands/${CommandID}`, Data, Headers);
-	if (Response.status != HttpOP.NO_CONTENT) throw `HTTP_ERROR: ${Response.statusText}`;
+	if (HttpOP.IsValidStatus(Response.status) == false) throw `HTTP_ERROR: ${Response.statusText}`;
 	return Response;
 }
