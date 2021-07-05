@@ -7,13 +7,13 @@ let StartTime;
 let EndTime;
 
 Dispatcher.AddHandler("READY", async () => {
-	EndTime = performance.now();
-
 	await Memory.CollectClient();
 	await Memory.CollectGuild();
 	await Memory.CollectEmojis();
 
 	let Owner = await Memory.CollectUser((User) => (User.ID == Options.OwnerID));
+
+	EndTime = performance.now();
 
 	console.log(`Successfully authenticated as: ${Memory.Client.Tag} (${Memory.Client.ID})\n`);
 	console.log(`Found guild: ${Memory.Guild.Name} (${Memory.Guild.ID})`);
