@@ -15,17 +15,18 @@ export async function DeleteChannel(ChannelID, Data, Headers) {
 }
 
 export async function GetMessages(ChannelID, Data, Headers) {
-	let Response = await DAPI.GETRequestA(`channels/${ChannelID}/messages`, Data, Headers);
+	let Response = await DAPI.GETRequestA(`channels/${ChannelID}/messages?${Data}`, null, Headers);
 	if (Response.status != HttpOP.OK) throw `HTTP_ERROR: ${Response.statusText}`;
 	return Response;
 }
 
 export async function GetMessage(ChannelID, MessageID, Data, Headers) {
-	let Response = await DAPI.GETRequestA(`channels/${ChannelID}/messages/${MessageID}`, Data, Headers);
+	let Response = await DAPI.GETRequestA(`channels/${ChannelID}/messages/${MessageID}?${Data}`, null, Headers);
 	if (Response.status != HttpOP.OK) throw `HTTP_ERROR: ${Response.statusText}`;
 	return Response;
 }
 
+// SEE: https://discord.com/developers/docs/reference#message-formatting
 export async function CreateMessage(ChannelID, Data, Headers) {
 	let Response = await DAPI.POSTRequestA(`channels/${ChannelID}/messages`, Data, Headers);
 	if (Response.status != HttpOP.OK) throw `HTTP_ERROR: ${Response.statusText}`;
@@ -45,7 +46,7 @@ export async function DeleteReaction(ChannelID, MessageID, EmojiEncoded, UserID,
 }
 
 export async function GetReactions(ChannelID, MessageID, EmojiEncoded, Data, Headers) {
-	let Response = await DAPI.GETRequestA(`channels/${ChannelID}/messages/${MessageID}/reactions/${EmojiEncoded}`, Data, Headers);
+	let Response = await DAPI.GETRequestA(`channels/${ChannelID}/messages/${MessageID}/reactions/${EmojiEncoded}?${Data}`, null, Headers);
 	if (Response.status != HttpOP.OK) throw `HTTP_ERROR: ${Response.statusText}`;
 	return Response;
 }
