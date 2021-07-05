@@ -82,6 +82,8 @@ export async function SaveRole(Data) {
 			RoleCallbacks.splice(I, 1);
 		}
 	}
+
+	return Roles[Data.id];
 }
 
 export async function SaveChannel(Data) {
@@ -109,6 +111,8 @@ export async function SaveChannel(Data) {
 			ChannelCallbacks.splice(I, 1);
 		}
 	}
+
+	return Channels[Data.id];
 }
 
 export async function SaveMember(Data) {
@@ -132,6 +136,8 @@ export async function SaveMember(Data) {
 			MemberCallbacks.splice(I, 1);
 		}
 	}
+
+	return Members[Data.user.id];
 }
 
 export async function SaveUser(Data) {
@@ -150,6 +156,8 @@ export async function SaveUser(Data) {
 			UserCallbacks.splice(I, 1);
 		}
 	}
+
+	return Users[Data.id];
 }
 
 export async function SaveEmoji(Data) {
