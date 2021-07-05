@@ -259,6 +259,13 @@ Dispatcher.AddHandler("GUILD_MEMBER_REMOVE", async (Data) => {
 	}
 });
 
+/* User Events */
+Dispatcher.AddHandler("USER_UPDATE", async (Data) => {
+	if (Memory.Users[Data.d.id] != null) {
+		Memory.SaveUser(Data.d);
+	}
+});
+
 
 /* Message Events */
 Dispatcher.AddHandler("MESSAGE_CREATE", async (Data) => {
