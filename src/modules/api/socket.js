@@ -77,7 +77,7 @@ export async function Connect() {
 	if (CurrTime - EndpointUpdate > 900000) {
 		const GatewayData = await DAPI.GETRequestA("gateway/bot");
 		if (GatewayData.status == HttpOP.FORBIDDEN) throw "INVALID_TOKEN";
-		if (GatewayData.status != HttpOP.OK) throw `GET_ERROR: ${GatewayData.statusText}`;
+		if (GatewayData.status != HttpOP.OK) throw `HTTP_ERROR: ${GatewayData.statusText}`;
 		if (GatewayData.data.session_start_limit.remaining == 0) throw "RATE_LIMITED";
 
 		Endpoint = GatewayData.data.url;
