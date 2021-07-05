@@ -4,6 +4,7 @@ now using raw discord api
 
 ## todo
 * reaction/interaction collector
+* enable dependabot (repo)
 * automatic command registration/handler
 * create datastore (or use mongo?)
 
