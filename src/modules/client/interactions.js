@@ -27,5 +27,20 @@ export async function DeleteResponse(InterToken, Data, Headers) {
 	return Response;
 }
 
-// TODO: might add followup messages later
-// SEE: https://discord.com/developers/docs/interactions/slash-commands#create-followup-message
+export async function CreateFollowup(InterToken, Data, Headers) {
+	let Response = await DAPI.POSTRequestA(`webhooks/${Options.AppID}/${InterToken}`, Data, Headers);
+	if (HttpOP.IsValidStatus(Response.status) == false) throw `HTTP_ERROR: ${Response.statusText}`;
+	return Response;
+}
+
+export async function EditFollowup(InterToken, MessageID, Data, Headers) {
+	let Response = await DAPI.PATCHRequestA(`webhooks/${Options.AppID}/${InterToken}/messages/${MessageID}`, Data, Headers);
+	if (HttpOP.IsValidStatus(Response.status) == false) throw `HTTP_ERROR: ${Response.statusText}`;
+	return Response;
+}
+
+export async function DeleteFollowup(InterToken, MessageID, Data, Headers) {
+	let Response = await DAPI.DELETERequestA(`webhooks/${Options.AppID}/${InterToken}/messages/${MessageID}`, Data, Headers);
+	if (HttpOP.IsValidStatus(Response.status) == false) throw `HTTP_ERROR: ${Response.statusText}`;
+	return Response;
+}
