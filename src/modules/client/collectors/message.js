@@ -28,7 +28,6 @@ export async function Collect(Filter, Options = {}) {
 			Duration: Options.Duration,
 			Callback: (Collected, _Index) => {
 				ActiveF.splice(_Index ?? ActiveF.findIndex((V) => (V == Collector)), 1);
-				console.log(ActiveF);
 				Resolve(Collected);
 			}
 		});
