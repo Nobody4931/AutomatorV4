@@ -1,4 +1,5 @@
 // https://discord.com/developers/docs/topics/gateway#message-reaction-add
+// -> https://discord.com/developers/docs/topics/gateway#message-reaction-add-message-reaction-add-event-fields
 import * as BaseCollector from "./base.js";
 
 export const ActiveC = [];
