@@ -268,7 +268,7 @@ Dispatcher.AddHandler("USER_UPDATE", async (Data) => {
 });
 
 
-/* Message Events */
+/* Collection Events */
 function HandleCollector(Event, CollectorData) {
 	Dispatcher.AddHandler(Event, async (Data) => {
 
@@ -302,3 +302,4 @@ function HandleCollector(Event, CollectorData) {
 
 HandleCollector("MESSAGE_CREATE", MessageCollector);
 HandleCollector("MESSAGE_REACTION_ADD", ReactionCollector);
+HandleCollector("INTERACTION_CREATE", ReactionCollector);
