@@ -147,12 +147,34 @@ Dispatcher.AddHandler("READY", async (Data) => {
 
 	Memory.SaveClient(Data.d.user);
 
-	// Leave unregistered guilds
+	// Check guilds
+	let FoundGuild = false;
+	let FoundEmoji = false;
+
 	for (const GuildP of Data.d.guilds) {
-		if (GuildP.id != Options.GuildID && GuildP.id != Options.EmojiID) {
-			Client.LeaveGuild(GuildP.id);
-		}
+		if (GuildP.id == Options.GuildID)
+			FoundGuild = true;
+		else if (GuildP.id == Options.EmojiID)
+			FoundEmoji = true;
+		else Client.LeaveGuild(GuildP.id);
 	}
+
+	if (FoundGuild == false)
+		throw "NOT_IN_GUILD";
+	if (FoundEmoji == false)
+		throw "NOT_IN_EMOJI";
+
+	// Request guild members
+	// SEE: https://discord.com/developers/docs/topics/gateway#request-guild-members
+	Socket.send(JSON.stringify({
+		"op": GatewayOP.REQUEST_MEMBERS,
+		"d": {
+			"guild_id": Options.GuildID,
+			"query": "",
+			"limit": 0,
+			"presences": false
+		}
+	}));
 });
 
 
@@ -210,6 +232,14 @@ Dispatcher.AddHandler("CHANNEL_DELETE", async (Data) => {
 Dispatcher.AddHandler(["GUILD_MEMBER_ADD", "GUILD_MEMBER_UPDATE"], async (Data) => {
 	if (Data.d.guild_id == Options.GuildID) {
 		Memory.SaveMember(Data.d);
+	}
+});
+
+Dispatcher.AddHandler("GUILD_MEMBERS_CHUNK", async (Data) => {
+	if (Data.d.guild_id == Options.GuildID) {
+		for (const MemberP of Data.d.members) {
+			Memory.SaveMember(MemberP);
+		}
 	}
 });
 
