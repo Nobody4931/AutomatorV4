@@ -131,7 +131,7 @@ export async function HandleDisconnect(Event) {
 	// but not going to lie they would probably never
 	// occur soooooooooooooo
 	switch (Event.code) {
-		case RATE_LIMITED:
+		case GatewayOP.RATE_LIMITED:
 			throw "RATE_LIMITED";
 
 		default:
