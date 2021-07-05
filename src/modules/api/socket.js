@@ -12,6 +12,7 @@ import * as ActivityType from "../client/enums/activity.js";
 import * as Client from "../client/wrappers/client.js";
 
 import * as MessageCollector from "../client/collectors/message.js";
+import * as ReactionCollector from "../client/collectors/reaction.js";
 
 import WebSocket from "ws";
 
@@ -268,30 +269,36 @@ Dispatcher.AddHandler("USER_UPDATE", async (Data) => {
 
 
 /* Message Events */
-Dispatcher.AddHandler("MESSAGE_CREATE", async (Data) => {
-	for (const I in MessageCollector.ActiveC) {
-		const Task = MessageCollector.ActiveC[I];
+function HandleCollector(Event, CollectorData) {
+	Dispatcher.AddHandler(Event, async (Data) => {
 
-		if (Task.Started == true && Task.Filter(Data.d) == true) {
-			if (Task.CollCallback != null)
-				Task.CollCallback(Data.d);
-			if (Task.Limit != null && --Task.Limit <= 0) {
-				Task.Stop(I);
-				continue;
+		for (const I in CollectorData.ActiveC) {
+			const Task = CollectorData.ActiveC[I];
+
+			if (Task.Started == true && Task.Filter(Data.d) == true) {
+				if (Task.CollCallback != null)
+					Task.CollCallback(Data.d);
+				if (Task.Limit != null && --Task.Limit <= 0) {
+					Task.Stop(I);
+					continue;
+				}
 			}
 		}
-	}
 
-	for (const I in MessageCollector.ActiveF) {
-		const Task = MessageCollector.ActiveF[I];
+		for (const I in CollectorData.ActiveF) {
+			const Task = CollectorData.ActiveF[I];
 
-		if (Task.Filter(Data.d) == true) {
-			Task.Collected.push(Data.d);
-
-			if (Task.Limit != null && --Task.Limit <= 0) {
-				Task.Stop(I);
-				continue;
+			if (Task.Filter(Data.d) == true) {
+				Task.Collected.push(Data.d);
+				if (Task.Limit != null && --Task.Limit <= 0) {
+					Task.Stop(I);
+					continue;
+				}
 			}
 		}
-	}
-});
+
+	});
+}
+
+HandleCollector("MESSAGE_CREATE", MessageCollector);
+HandleCollector("MESSAGE_REACTION_ADD", ReactionCollector);
