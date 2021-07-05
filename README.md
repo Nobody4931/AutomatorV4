@@ -3,7 +3,7 @@ the coolest private discord management bot ever made \
 now using raw discord api
 
 ## todo
-* message/reaction/interaction collector
+* reaction/interaction collector
 * automatic command registration/handler
 * create datastore (or use mongo?)
 

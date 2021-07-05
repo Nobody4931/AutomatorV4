@@ -1,14 +1,17 @@
 // https://discord.com/developers/docs/topics/gateway
 import * as DAPI from "./api.js";
-import * as Dispatcher from "../client/dispatcher.js";
 import * as Memory from "../client/memory.js";
-import * as Client from "../client/wrappers/client.js";
+import * as Dispatcher from "../client/dispatcher.js";
 import * as Options from "../../config.js";
 
 import * as GatewayOP from "./enums/gateway.js";
 import * as HttpOP from "./enums/http.js";
 import * as Intents from "./enums/intents.js";
 import * as ActivityType from "../client/enums/activity.js";
+
+import * as Client from "../client/wrappers/client.js";
+
+import * as MessageCollector from "../client/collectors/message.js";
 
 import WebSocket from "ws";
 
@@ -141,7 +144,9 @@ export async function HandleDisconnect(Event) {
 }
 
 
-/* Initialization */
+/*** INITIALIZATION ***/
+
+/* Ready Event */
 Dispatcher.AddHandler("READY", async (Data) => {
 	LastSession = Data.d.session_id;
 
@@ -178,6 +183,7 @@ Dispatcher.AddHandler("READY", async (Data) => {
 });
 
 
+/* Guild + Emoji Events */
 Dispatcher.AddHandler(["GUILD_CREATE", "GUILD_UPDATE"], async (Data) => {
 	if (Data.d.id == Options.GuildID)
 		return Memory.SaveGuild(Data.d);
@@ -203,6 +209,7 @@ Dispatcher.AddHandler("GUILD_EMOJIS_UPDATE", async (Data) => {
 });
 
 
+/* Role Events */
 Dispatcher.AddHandler(["GUILD_ROLE_CREATE", "GUILD_ROLE_UPDATE"], async (Data) => {
 	if (Data.d.guild_id == Options.GuildID) {
 		Memory.SaveRole(Data.d.role);
@@ -216,6 +223,7 @@ Dispatcher.AddHandler("GUILD_ROLE_DELETE", async (Data) => {
 });
 
 
+/* Channel Events */
 Dispatcher.AddHandler(["CHANNEL_CREATE", "CHANNEL_UPDATE"], async (Data) => {
 	if (Data.d.guild_id == Options.GuildID) {
 		Memory.SaveChannel(Data.d);
@@ -229,6 +237,7 @@ Dispatcher.AddHandler("CHANNEL_DELETE", async (Data) => {
 });
 
 
+/* Member Events */
 Dispatcher.AddHandler(["GUILD_MEMBER_ADD", "GUILD_MEMBER_UPDATE"], async (Data) => {
 	if (Data.d.guild_id == Options.GuildID) {
 		Memory.SaveMember(Data.d);
@@ -247,5 +256,35 @@ Dispatcher.AddHandler("GUILD_MEMBER_REMOVE", async (Data) => {
 	if (Data.d.guild_id == Options.GuildID) {
 		delete Memory.Members[Data.user.id];
 		delete Memory.Users[Data.user.id];
+	}
+});
+
+
+/* Message Events */
+Dispatcher.AddHandler("MESSAGE_CREATE", async (Data) => {
+	for (const I in MessageCollector.ActiveC) {
+		const Task = MessageCollector.ActiveC[I];
+
+		if (Task.Started == true && Task.Filter(Data.d) == true) {
+			if (Task.CollCallback != null)
+				Task.CollCallback(Data.d);
+			if (Task.Limit != null && --Task.Limit <= 0) {
+				Task.Stop(I);
+				continue;
+			}
+		}
+	}
+
+	for (const I in MessageCollector.ActiveF) {
+		const Task = MessageCollector.ActiveF[I];
+
+		if (Task.Filter(Data.d) == true) {
+			Task.Collected.push(Data.d);
+
+			if (Task.Limit != null && --Task.Limit <= 0) {
+				Task.Stop(I);
+				continue;
+			}
+		}
 	}
 });
