@@ -3,8 +3,9 @@ the coolest private discord management bot ever made \
 now using raw discord api
 
 ## todo
+* put emoji loaded tag somewhere else
 * message/reaction/interaction collector
-* the actual bot lol
+* automatic command registration/handler
 
 ## questions ive literally never been asked before
 
