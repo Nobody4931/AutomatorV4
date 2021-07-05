@@ -53,7 +53,7 @@ export async function SaveRole(Data) {
 	Roles[Data.id].Hoist = Data.hoist;
 	Roles[Data.id].Mentionable = Data.mentionable;
 	Roles[Data.id].Managed = Data.managed;
-	Roles[Data.id].BoostRole = Data.tags?.premium_subscriber;
+	Roles[Data.id].BoostRole = Data.tags?.premium_subscriber ?? false;
 	Roles[Data.id].Permissions = parseInt(Data.permissions);
 }
 
@@ -113,6 +113,7 @@ export async function SaveEmoji(Data) {
 		Emojis[Emoji.name].ID = Emoji.id;
 		Emojis[Emoji.name].Name = Emoji.name;
 		Emojis[Emoji.name].Colons = Emoji.require_colons ?? false;
+		Emojis[Emoji.name].Animated = Emoji.animated ?? false;
 		Emojis[Emoji.name].Available = Emoji.available ?? false;
 	}
 }
