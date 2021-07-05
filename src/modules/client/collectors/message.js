@@ -1,3 +1,4 @@
+// https://discord.com/developers/docs/topics/gateway#message-create
 import * as BaseCollector from "./base.js";
 
 export const ActiveC = [];
