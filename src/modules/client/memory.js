@@ -4,8 +4,7 @@
 // 			* if so, disable ban/kick commands from other bots
 // 			* and also create custom ban/kick commands
 
-import * as DAPI from "../api/api.js";
-import * as HttpOP from "../api/enums/http.js";
+import * as Options from "../../config.js";
 
 export const Client   = {};
 export const Guild    = {};
@@ -35,6 +34,7 @@ export async function SaveClient(Data) {
 	Client.Username = Data.username;
 	Client.Discriminator = Data.discriminator;
 	Client.Tag = `${Data.username}#${Data.discriminator}`;
+	Client.Avatar = Data.avatar;
 
 	if (ClientCallback != null)
 		ClientCallback();
@@ -118,6 +118,7 @@ export async function SaveChannel(Data) {
 export async function SaveMember(Data) {
 	// https://discord.com/developers/docs/resources/guild#guild-member-object
 	if (Data.user == null) return;
+	if (Data.user.id == Options.AppID) return SaveClient(Data.user);
 
 	Members[Data.user.id] = {};
 	Members[Data.user.id].ID = Data.user.id;
@@ -142,11 +143,14 @@ export async function SaveMember(Data) {
 
 export async function SaveUser(Data) {
 	// https://discord.com/developers/docs/resources/user#user-object
+	if (Data.id == Options.AppID) return SaveClient(Data);
+
 	Users[Data.id] = {};
 	Users[Data.id].ID = Data.id;
 	Users[Data.id].Username = Data.username;
 	Users[Data.id].Discriminator = Data.discriminator;
 	Users[Data.id].Tag = `${Data.username}#${Data.discriminator}`;
+	Users[Data.id].Avatar = Data.avatar;
 	Users[Data.id].Bot = Data.bot ?? false;
 	Users[Data.id].System = Data.system ?? false;
 
