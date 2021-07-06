@@ -4,7 +4,7 @@ now using raw discord api
 
 ## todo
 * automatic command registration/handler
-* create datastore (or use mongo?)
+* create datastore
 
 ## questions ive literally never been asked before
 
