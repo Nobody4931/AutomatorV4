@@ -62,3 +62,6 @@ export async function DeleteGuild(CommandID, Data, Headers) {
 	if (HttpOP.IsValidStatus(Response.status) == false) throw `HTTP_ERROR: ${Response.statusText}`;
 	return Response;
 }
+
+// TODO: Add support for command permissions to keep admin-only commands away from nerds
+// 		* https://discord.com/developers/docs/interactions/slash-commands#get-guild-application-command-permissions
