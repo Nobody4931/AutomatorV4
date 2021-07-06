@@ -27,6 +27,10 @@ export async function DeleteResponse(InterToken, Data, Headers) {
 	return Response;
 }
 
+// Probably won't ever need to use these, since you can specify an
+// interaction object when creating a normal message
+// https://discord.com/developers/docs/resources/channel#message-object
+
 export async function CreateFollowup(InterToken, Data, Headers) {
 	let Response = await DAPI.POSTRequestA(`webhooks/${Options.AppID}/${InterToken}`, Data, Headers);
 	if (HttpOP.IsValidStatus(Response.status) == false) throw `HTTP_ERROR: ${Response.statusText}`;
