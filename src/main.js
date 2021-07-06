@@ -14,7 +14,7 @@ Dispatcher.AddHandler("READY", async () => {
 	console.log(`Successfully authenticated as: ${Memory.Client.Tag} (${Memory.Client.ID})\n`);
 	console.log(`Found guild: ${Memory.Guild.Name} (${Memory.Guild.ID})`);
 	console.log(`Found owner: ${Owner.Tag} (${Owner.ID})`);
-	console.log(`Found ${Emojis.length} emojis: ${Emojis.join(", ")}\n`);
+	console.log(`Found ${Emojis.length} emoji(s): ${Emojis.join(", ")}`);
 });
 
 Socket.Connect();
