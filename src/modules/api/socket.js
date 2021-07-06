@@ -11,8 +11,11 @@ import * as ActivityType from "../client/enums/activity.js";
 
 import * as Client from "../client/wrappers/client.js";
 
-import * as MessageCollector from "../client/collectors/message.js";
-import * as ReactionCollector from "../client/collectors/reaction.js";
+import {
+	Message as MessageCollector,
+	Reaction as ReactionCollector,
+	Interaction as InteractionCollector
+} from "../client/collectors.js";
 
 import WebSocket from "ws";
 
@@ -269,31 +272,29 @@ Dispatcher.AddHandler("USER_UPDATE", async (Data) => {
 
 
 /* Collection Events */
-function HandleCollector(Event, CollectorData) {
+function HandleCollector(Event, Collector) {
 	Dispatcher.AddHandler(Event, async (Data) => {
 
-		for (const I in CollectorData.ActiveC) {
-			const Task = CollectorData.ActiveC[I];
+		// Live collectors
+		for (const Index in Collector.ActiveLive) {
+			const Task = Collector.ActiveLive[Index];
 
 			if (Task.Started == true && Task.Filter(Data.d) == true) {
-				if (Task.CollCallback != null)
-					Task.CollCallback(Data.d);
-				if (Task.Limit != null && --Task.Limit <= 0) {
-					Task.Stop(I);
-					continue;
-				}
+				if (Task.CallbackCol != null)
+					Task.CallbackCol(Data.d);
+				if (Task.Limit != null && --Task.Limit <= 0)
+					Task.Stop(Index);
 			}
 		}
 
-		for (const I in CollectorData.ActiveF) {
-			const Task = CollectorData.ActiveF[I];
+		// Bulk collectors
+		for (const Index in Collector.ActiveBulk) {
+			const Task = Collector.ActiveBulk[Index];
 
 			if (Task.Filter(Data.d) == true) {
 				Task.Collected.push(Data.d);
-				if (Task.Limit != null && --Task.Limit <= 0) {
-					Task.Stop(I);
-					continue;
-				}
+				if (Task.Limit != null && --Task.Limit <= 0)
+					Task.Stop(Index);
 			}
 		}
 
@@ -302,4 +303,4 @@ function HandleCollector(Event, CollectorData) {
 
 HandleCollector("MESSAGE_CREATE", MessageCollector);
 HandleCollector("MESSAGE_REACTION_ADD", ReactionCollector);
-HandleCollector("INTERACTION_CREATE", ReactionCollector);
+HandleCollector("INTERACTION_CREATE", InteractionCollector);
