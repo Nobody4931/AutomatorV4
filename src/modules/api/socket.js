@@ -9,7 +9,7 @@ import * as HttpOP from "./enums/http.js";
 import * as Intents from "./enums/intents.js";
 import * as ActivityType from "../client/enums/activity.js";
 
-import * as Client from "../client/wrappers/client.js";
+import * as DClient from "../client/wrappers/client.js";
 
 import {
 	Message as MessageCollector,
@@ -165,7 +165,7 @@ Dispatcher.AddHandler("READY", async (Data) => {
 			FoundGuild = true;
 		else if (GuildP.id == Options.EmojiID)
 			FoundEmoji = true;
-		else Client.LeaveGuild(GuildP.id);
+		else DClient.LeaveGuild(GuildP.id);
 	}
 
 	if (FoundGuild == false)
@@ -193,7 +193,7 @@ Dispatcher.AddHandler(["GUILD_CREATE", "GUILD_UPDATE"], async (Data) => {
 		return Memory.SaveGuild(Data.d);
 	if (Data.d.id == Options.EmojiID)
 		return Memory.SaveEmoji(Data.d);
-	Client.LeaveGuild(Data.d.id);
+	DClient.LeaveGuild(Data.d.id);
 });
 
 Dispatcher.AddHandler("GUILD_DELETE", async (Data) => {
