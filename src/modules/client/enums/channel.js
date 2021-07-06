@@ -1,3 +1,5 @@
+// Channel Type
+// https://discord.com/developers/docs/resources/channel#channel-object-channel-types
 export const GUILD_TEXT           = 0;
 export const DM                   = 1;
 export const GUILD_VOICE          = 2;

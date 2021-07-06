@@ -1,3 +1,5 @@
+// Message Type
+// https://discord.com/developers/docs/resources/channel#message-object-message-types
 export const DEFAULT                                      = 0;
 export const RECIPIENT_ADD                                = 1;
 export const RECIPIENT_REMOVE                             = 2;
@@ -21,6 +23,8 @@ export const APPLICATION_COMMAND                          = 20;
 export const THREAD_STARTER_MESSAGE                       = 21;
 export const GUILD_INVITE_REMINDER                        = 22;
 
+// Message Flags
+// https://discord.com/developers/docs/resources/channel#message-object-message-flags
 export const FLAG_CROSSPOSTED            = (1 << 0);
 export const FLAG_IS_CROSSPOST           = (1 << 1);
 export const FLAG_SUPPRESS_EMBEDS        = (1 << 2);

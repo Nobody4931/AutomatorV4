@@ -1,3 +1,5 @@
+// Intent Flags
+// https://discord.com/developers/docs/topics/gateway#list-of-intents
 export const GUILDS                   = (1 << 0);
 export const GUILD_MEMBERS            = (1 << 1);
 export const GUILD_BANS               = (1 << 2);

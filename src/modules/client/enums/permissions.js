@@ -1,3 +1,5 @@
+// Permission Flags
+// https://discord.com/developers/docs/topics/permissions#permissions-bitwise-permission-flags
 export const CREATE_INSTANT_INVITE = (1 << 0);
 export const KICK_MEMBERS          = (1 << 1);
 export const BAN_MEMBERS           = (1 << 2);

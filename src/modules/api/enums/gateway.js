@@ -1,3 +1,5 @@
+// Gateway Opcodes
+// https://discord.com/developers/docs/topics/opcodes-and-status-codes#gateway-gateway-opcodes
 export const DISPATCH        = 0;
 export const HEARTBEAT       = 1;
 export const IDENTIFY        = 2;
@@ -10,6 +12,8 @@ export const INVALID_SESSION = 9;
 export const HELLO           = 10;
 export const HEARTBEAT_ACK   = 11;
 
+// Gateway Close Codes
+// https://discord.com/developers/docs/topics/opcodes-and-status-codes#gateway-gateway-close-event-codes
 export const UNKNOWN_ERROR       = 4000;
 export const UNKNOWN_OPCODE      = 4001;
 export const DECODE_ERROR        = 4002;
