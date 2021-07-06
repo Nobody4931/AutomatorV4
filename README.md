@@ -3,7 +3,6 @@ the coolest private discord management bot ever made \
 now using raw discord api
 
 ## todo
-* clean up collector code (theyre literally the same)
 * enable dependabot (repo)
 * automatic command registration/handler
 * create datastore (or use mongo?)
