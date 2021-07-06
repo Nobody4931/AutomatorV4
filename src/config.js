@@ -1,5 +1,8 @@
 (await import("dotenv")).config();
 
+export const Name = "Automator";
+export const Version = "v4.0.0a-beta";
+
 export const APIVersion = "v9";
 export const WSVersion = "9";
 
