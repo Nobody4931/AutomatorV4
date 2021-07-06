@@ -263,7 +263,7 @@ Dispatcher.AddHandler("GUILD_MEMBER_REMOVE", async (Data) => {
 
 /* User Events */
 Dispatcher.AddHandler("USER_UPDATE", async (Data) => {
-	if (Memory.Users[Data.d.id] != null) {
+	if (Memory.Users[Data.d.id] != null || Data.d.id == Options.AppID) {
 		Memory.SaveUser(Data.d);
 	}
 });
