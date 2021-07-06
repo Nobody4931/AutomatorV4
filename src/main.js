@@ -51,5 +51,6 @@ Dispatcher.AddHandler("INTERACTION_CREATE", async (Data) => {
 	}
 });
 
+/* Login Routine */
 console.log(`Loading ${Options.Name} ${Options.Version}...`);
 Socket.Connect();
