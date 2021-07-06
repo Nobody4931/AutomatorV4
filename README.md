@@ -3,7 +3,6 @@ the coolest private discord management bot ever made \
 now using raw discord api
 
 ## todo
-* automatic command registration/handler
 * create datastore
 
 ## questions ive literally never been asked before
