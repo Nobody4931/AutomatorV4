@@ -39,7 +39,6 @@ export function SendPing() {
 
 /* Send Identify (2) */
 export function SendIdentify() {
-	console.log("starting new session");
 	Socket.send(JSON.stringify({
 		"op": GatewayOP.IDENTIFY,
 		"d": {
@@ -66,7 +65,6 @@ export function SendIdentify() {
 
 /* Send Resume (6) */
 export function SendResume() {
-	console.log("resuming session");
 	Socket.send(JSON.stringify({
 		"op": GatewayOP.RESUME,
 		"d": {
