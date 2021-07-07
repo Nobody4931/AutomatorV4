@@ -35,12 +35,17 @@ Dispatcher.AddHandler("READY", async () => {
 	console.log(`Unregistered ${Unregisters.length} old command(s)`);
 
 	// Register new commands
+	let Registers = [];
 	for (const CmdDir of Fs.readdirSync("src/commands")) {
 		let CommandMeta = await import(`./commands/${CmdDir}/command.js`);
-		let CommandData = await DCommands.CreateGuild(CommandMeta.Structure);
-		Commands[CommandData.data.id] = CommandMeta.Invoke;
-		console.log(`Registered command '${CommandMeta.Structure.name}'`);
+		Registers.push(DCommands.CreateGuild(CommandMeta.Structure).then((CommandData) => {
+			Commands[CommandData.data.id] = CommandMeta.Invoke;
+			console.log(`Registered command '${CommandMeta.Structure.name}'`);
+		}));
 	}
+
+	await Promise.all(Registers);
+	console.log(`Registered ${Registers.length} command(s)`);
 });
 
 /* Command Handler */
