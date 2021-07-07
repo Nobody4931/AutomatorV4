@@ -27,8 +27,30 @@ export const Colors = {
 	["Magenta"]: 0xff0077
 };
 
+
 export async function Sleep(Milliseconds) {
 	return new Promise((Resolve) => setTimeout(Resolve, Milliseconds));
+}
+
+export function ReadString16(Buffer, Offset = 0) {
+	let Result = "";
+
+	while (true) {
+		let CharCode = Buffer.readUInt16LE(Offset);
+		if (CharCode == 0) break;
+
+		Result += String.fromCharCode(CharCode);
+		Offset += 2;
+	}
+
+	return [ Result, Offset ];
+}
+
+export function WriteString16(Buffer, Data, Offset = 0) {
+	for (let I = 0; I < Data.length; ++I)
+		Offset = Buffer.writeUInt16LE(Data.charCodeAt(I), Offset);
+	Offset = Buffer.writeUInt16LE(0, Offset);
+	return Offset;
 }
 
 // https://discord.com/developers/docs/reference#message-formatting
