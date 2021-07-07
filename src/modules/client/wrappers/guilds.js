@@ -15,7 +15,7 @@ export async function CreateChannel(Data, Headers) {
 	return Response;
 }
 
-export async function MoveChannel(Data, Headers) {
+export async function MoveChannels(Data, Headers) {
 	let Response = await DAPI.PATCHRequestA(`guilds/${Options.GuildID}/channels`, Data, Headers);
 	if (HttpOP.IsValidStatus(Response.status) == false) throw `HTTP_ERROR: ${Response.statusText}`;
 	return Response;
@@ -69,7 +69,7 @@ export async function CreateRole(Data, Headers) {
 	return Response;
 }
 
-export async function MoveRole(Data, Headers) {
+export async function MoveRoles(Data, Headers) {
 	let Response = await DAPI.PATCHRequestA(`guilds/${Options.GuildID}/roles`, Data, Headers);
 	if (HttpOP.IsValidStatus(Response.status) == false) throw `HTTP_ERROR: ${Response.statusText}`;
 	return Response;
