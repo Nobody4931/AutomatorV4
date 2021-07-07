@@ -5,6 +5,8 @@ import * as Memory from "../client/memory.js";
 
 import * as DImages from "../client/wrappers/images.js";
 
+import Fs from "fs";
+
 
 export const Colors = {
 	["Red"]:     0xff0000,
@@ -30,6 +32,16 @@ export const Colors = {
 
 export async function Sleep(Milliseconds) {
 	return new Promise((Resolve) => setTimeout(Resolve, Milliseconds));
+}
+
+export function BufferFromFile(Path, Options) {
+	let FileText = Fs.readFileSync(Path, Options);
+	let FileData = Buffer.alloc(FileText.length);
+
+	for (let I = 0; I < FileText.length; ++I)
+		FileData.writeUInt8(FileText.charCodeAt(I), I);
+
+	return FileData;
 }
 
 export function ReadString16(Buffer, Offset = 0) {

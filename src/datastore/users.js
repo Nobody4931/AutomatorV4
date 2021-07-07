@@ -1,7 +1,7 @@
 // NOTE: First 64 bytes of each userdata file is a mask applied to the data
 
 import { GenerateMask, ApplyMask } from "./mask.js";
-import { ReadString16, WriteString16 } from "../modules/functions/util.js";
+import { BufferFromFile, ReadString16, WriteString16 } from "../modules/functions/util.js";
 
 import * as ValueType from "./enums/users.js";
 
@@ -21,15 +21,11 @@ export function Load(UserID) {
 	if (!Fs.existsSync(Userfile))
 		return Data[UserID];
 
-	let Filedata = Fs.readFileSync(Userfile, { encoding: "binary" });
-	let Userdata = Buffer.alloc(Filedata.length);
+	let Userdata = BufferFromFile(Userfile, { encoding: "binary" });
 	let Offset = 64;
 
 	if (Userdata.byteLength < 64)
 		throw `${UserID}_USERDATA_CORRUPTED`;
-
-	for (let I = 0; I < Filedata.length; ++I)
-		Userdata.writeUInt8(Filedata.charCodeAt(I), I);
 
 	ApplyMask(Userdata);
 
@@ -92,7 +88,6 @@ export async function Save() {
 				DataLen += 1 + 1;
 			if (Data[UserID].Color != null)
 				DataLen += 1 + 1;
-			DataLen += 1;
 
 			// Generate userdata
 			let Userfile = `db/users/${UserID}.auto`;
