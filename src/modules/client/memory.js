@@ -211,48 +211,93 @@ export async function CollectGuild() {
 	});
 }
 
-export async function CollectRole(Filter) {
+export async function CollectRole(Filter, Timeout = null) {
 	return new Promise((Resolve) => {
 		for (const Role of Object.values(Roles))
 			if (Filter(Role) == true)
 				return Resolve(Role);
-		RoleCallbacks.push([ Filter, Resolve ]);
+
+		let Callback = [ Filter, Resolve ];
+		Timeout != null && setTimeout(() => {
+			let Index = RoleCallbacks.findIndex((CB) => (CB == Callback));
+			if (Index != -1)
+				RoleCallbacks.splice(Index, 1);
+			Resolve(null);
+		}, Timeout);
+
+		RoleCallbacks.push(Callback);
 	});
 }
 
-export async function CollectChannel(Filter) {
+export async function CollectChannel(Filter, Timeout = null) {
 	return new Promise((Resolve) => {
 		for (const Channel of Object.values(Channels))
 			if (Filter(Channel) == true)
 				return Resolve(Channel);
-		ChannelCallbacks.push([ Filter, Resolve ]);
+
+		let Callback = [ Filter, Resolve ];
+		Timeout != null && setTimeout(() => {
+			let Index = ChannelCallbacks.findIndex((CB) => (CB == Callback));
+			if (Index != -1)
+				ChannelCallbacks.splice(Index, 1);
+			Resolve(null);
+		}, Timeout);
+
+		ChannelCallbacks.push(Callback);
 	});
 }
 
-export async function CollectMember(Filter) {
+export async function CollectMember(Filter, Timeout = null) {
 	return new Promise((Resolve) => {
 		for (const Member of Object.values(Members))
 			if (Filter(Member) == true)
 				return Resolve(Member);
-		MemberCallbacks.push([ Filter, Resolve ]);
+
+		let Callback = [ Filter, Resolve ];
+		Timeout != null && setTimeout(() => {
+			let Index = MemberCallbacks.findIndex((CB) => (CB == Callback));
+			if (Index != -1)
+				MemberCallbacks.splice(Index, 1);
+			Resolve(null);
+		}, Timeout);
+
+		MemberCallbacks.push(Callback);
 	});
 }
 
-export async function CollectUser(Filter) {
+export async function CollectUser(Filter, Timeout = null) {
 	return new Promise((Resolve) => {
 		for (const User of Object.values(Users))
 			if (Filter(User) == true)
 				return Resolve(User);
-		UserCallbacks.push([ Filter, Resolve ]);
+
+		let Callback = [ Filter, Resolve ];
+		Timeout != null && setTimeout(() => {
+			let Index = UserCallbacks.findIndex((CB) => (CB == Callback));
+			if (Index != -1)
+				UserCallbacks.splice(Index, 1);
+			Resolve(null);
+		}, Timeout);
+
+		UserCallbacks.push(Callback);
 	});
 }
 
-export async function CollectEmoji(Filter) {
+export async function CollectEmoji(Filter, Timeout = null) {
 	return new Promise((Resolve) => {
 		for (const Emoji of Object.values(Emojis))
 			if (typeof Emoji == "object" && Filter(Emoji) == true)
 				return Resolve(Emoji);
-		EmojiCallbacks.push([ Filter, Resolve ]);
+
+		let Callback = [ Filter, Resolve ];
+		Timeout != null && setTimeout(() => {
+			let Index = EmojiCallbacks.findIndex((CB) => (CB == Callback));
+			if (Index != -1)
+				EmojiCallbacks.splice(Index, 1);
+			Resolve(null);
+		}, Timeout);
+
+		EmojiCallbacks.push(Callback);
 	});
 }
 
