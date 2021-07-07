@@ -36,11 +36,9 @@ export function ReadString16(Buffer, Offset = 0) {
 	let Result = "";
 
 	while (true) {
-		let CharCode = Buffer.readUInt16LE(Offset);
+		let CharCode = Buffer.readUInt16LE(Offset); Offset += 2;
 		if (CharCode == 0) break;
-
 		Result += String.fromCharCode(CharCode);
-		Offset += 2;
 	}
 
 	return [ Result, Offset ];
