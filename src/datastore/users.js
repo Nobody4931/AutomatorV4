@@ -1,3 +1,6 @@
+// NOTE: First 64 bytes of each userdata file is a mask applied to the data
+
+import { GenerateMask, ApplyMask } from "./mask.js";
 import { ReadString16, WriteString16 } from "../modules/functions/util.js";
 
 import * as ValueType from "./enums/users.js";
@@ -12,15 +15,25 @@ export const Data = {};
 export function Load(UserID) {
 	if (Data[UserID] != null)
 		return Data[UserID];
-
-	let Userfile = `db/users/${UserID}.auto`;
-	let Userdata = Buffer.from(Fs.existsSync(Userfile)
-		? Fs.readFileSync(Userfile, { encoding: "binary" })
-		: Buffer.alloc(0));
-	let Offset = 0;
-
 	Data[UserID] = {};
 
+	let Userfile = `db/users/${UserID}.auto`;
+	if (!Fs.existsSync(Userfile))
+		return Data[UserID];
+
+	let Filedata = Fs.readFileSync(Userfile, { encoding: "binary" });
+	let Userdata = Buffer.alloc(Filedata.length);
+	let Offset = 64;
+
+	if (Userdata.byteLength < 64)
+		throw `${UserID}_USERDATA_CORRUPTED`;
+
+	for (let I = 0; I < Filedata.length; ++I)
+		Userdata.writeUInt8(Filedata.charCodeAt(I), I);
+
+	ApplyMask(Userdata);
+
+	// Parse userdata
 	while (Offset < Userdata.byteLength) {
 		switch (Userdata.readUInt8(Offset++)) {
 
@@ -66,7 +79,7 @@ export async function Save() {
 	for (const UserID in Data) {
 		Threads.push(new Promise((Resolve) => {
 			// Calculate userdata size
-			let DataLen = 0;
+			let DataLen = 64;
 			if (Data[UserID].Name != null)
 				DataLen += 1 + (Data[UserID].Name.length + 1) * 2;
 			if (Data[UserID].School != null)
@@ -79,11 +92,14 @@ export async function Save() {
 				DataLen += 1 + 1;
 			if (Data[UserID].Color != null)
 				DataLen += 1 + 1;
+			DataLen += 1;
 
 			// Generate userdata
 			let Userfile = `db/users/${UserID}.auto`;
 			let Userdata = Buffer.alloc(DataLen);
-			let Offset = 0;
+			let Offset = 64;
+
+			GenerateMask(Userdata);
 
 			if (Data[UserID].Name != null) {
 				Offset = Userdata.writeUInt8(ValueType.NAME, Offset);
@@ -119,6 +135,7 @@ export async function Save() {
 			}
 
 			// Save to file
+			ApplyMask(Userdata);
 			if (Fs.existsSync(Userfile))
 				Fs.renameSync(Userfile, `${Userfile}.old`);
 			Fs.writeFileSync(Userfile, Userdata, { encoding: "binary" });
