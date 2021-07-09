@@ -19,6 +19,11 @@
 //        		### Haven't planned this far ahead yet,
 //	        		can't think straight at 12 AM either ###
 //        });
+// - On second thought, Auto____ don't have to be classes, they
+//   can also be enums and the AutoFormat constructor will just
+//   check it for them (Though classes = much neater codebase)
+// - On third thought, AutoFormat could just be a normal function
+//   aswell lol
 
 // NOTE: First 64 bytes of each userdata file is a mask applied to the data
 
