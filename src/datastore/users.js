@@ -1,3 +1,25 @@
+// TODO:
+// - Instead of a bunch of these manually written code that
+//   can't be refactored even though it's practically the same,
+//   let classes handle the data formatting instead
+// - Format will obviously stay the same (Mostly)
+// 		- Lists will no longer have a byte to specify count,
+//        rather no values stored in Automator format will be
+//        zero's, so list elements will be separated with a zero
+// - Code generation will not
+// 		- Userdata = new AutoFormat({
+//        		Name: AutoString,     <-- Auto____ is a CLASS, when in constructor it is called with the new keyword
+//        		School: AutoUInt8,
+//        		Year: AutoUInt8,
+//        		Modifiers: [ AutoUInt8 ],    <-- List of AutoUInt8's
+//        		Rank: AutoUInt8,
+//        		Color: AutoUInt8,
+//        });
+//      - Botdata = new AutoFormat({
+//        		### Haven't planned this far ahead yet,
+//	        		can't think straight at 12 AM either ###
+//        });
+
 // NOTE: First 64 bytes of each userdata file is a mask applied to the data
 
 import { GenerateMask, ApplyMask } from "./mask.js";
