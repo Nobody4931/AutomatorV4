@@ -3,22 +3,19 @@
 //   can't be refactored even though it's practically the same,
 //   let classes handle the data formatting instead
 // - Format will obviously stay the same (Mostly)
-// 		- Lists will no longer have a byte to specify count,
-//        rather no values stored in Automator format will be
-//        zero's, so list elements will be separated with a zero
 // - Code generation will not
-// 		- Userdata = new AutoFormat({
+// 		- UserData = new AutoFormat({
 //        		Name: AutoString,     <-- Auto____ is a CLASS, when in constructor it is called with the new keyword
 //        		School: AutoUInt8,
 //        		Year: AutoUInt8,
-//        		Modifiers: [ AutoUInt8 ],    <-- List of AutoUInt8's
+//        		Modifiers: [ AutoUInt8 ],    <-- List of AutoUInt8's (In format: SIZE, SIZE * ELEMENT)
 //        		Rank: AutoUInt8,
 //        		Color: AutoUInt8,
-//        });
-//      - Botdata = new AutoFormat({
+//        }, FORMAT_ONCE);
+//      - TicketData = new AutoFormat({     <-- Uses the Array format, will be one element after the other until EOF
 //        		### Haven't planned this far ahead yet,
 //	        		can't think straight at 12 AM either ###
-//        });
+//        }, FORMAT_ARRAY);
 // - On second thought, Auto____ don't have to be classes, they
 //   can also be enums and the AutoFormat constructor will just
 //   check it for them (Though classes = much neater codebase)
