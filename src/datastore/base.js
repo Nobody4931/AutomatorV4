@@ -1,7 +1,8 @@
 import * as Mask from "./mask.js";
 import Fs from "fs";
 
-export default class AutoFormat {
+/* Static Auto File Formatter */
+export class AutoFormat {
 	constructor(FilePath, Structure, Array = false) {
 		this.FilePath = FilePath;
 		this.Struct = Structure;
@@ -62,6 +63,31 @@ export default class AutoFormat {
 			Fs.renameSync(this.FilePath, `${this.FilePath}.old`);
 		Fs.writeFileSync(this.FilePath, FileData, { encoding: "binary" });
 
+		return this;
+	}
+};
+
+/* Dynamic Auto File Formatter */
+export class AutoFormatD {
+	constructor(NewFormat, OldFormat, Converter) {
+		if (NewFormat.FilePath != OldFormat.FilePath)
+			throw "FILEPATH_MISMATCH";
+
+		this.NewFmt = NewFormat;
+		this.OldFmt = OldFormat;
+		this.Convert = Converter;
+		this.Data = null;
+	}
+
+	Load() {
+		this.OldFmt.Load();
+		this.Data = this.Convert(this.OldFmt.Data);
+		return this;
+	}
+
+	Save() {
+		this.NewFmt.Data = this.Data;
+		this.NewFmt.Save();
 		return this;
 	}
 };
