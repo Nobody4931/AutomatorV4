@@ -12,3 +12,5 @@ export const AppToken = "Bot " + process.env.TOKEN;
 export const GuildID = "776526044756180993"; // Main server
 export const EmojiID = "861030878003855380"; // Emoji server
 export const OwnerID = "287314629502173184";
+
+export const SaveTime = 30000;
