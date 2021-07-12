@@ -1,3 +1,4 @@
+// TODO: Now make the actual userdata / ticketdata / etc. as a wrapper for my datastore library
 import Fs from "fs";
 
 import * as Options from "./config.js";
