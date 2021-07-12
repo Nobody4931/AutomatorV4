@@ -34,7 +34,7 @@ export const AutoBigInt = {
 
 		for (let I = 0; I < Bytes; ++I) {
 			Result |= BigInt(Buffer.readUInt8(Offset)) * Multi;
-			Multi <<= 1;
+			Multi <<= 8n;
 			++Offset;
 		}
 
@@ -49,18 +49,18 @@ export const AutoBigInt = {
 		if (Negative == true)
 			Data *= -1n;
 
-		let Bytes = FastLog2(Data) + 1;
+		let Bytes = Number(FastLog2(Data)) + 1;
 		Offset = Buffer.writeUInt16LE(Bytes, Offset);
 
 		for (let I = 0; I < Bytes; ++I) {
-			Offset = Buffer.writeUInt8(Data & 0b11111111n, Offset);
-			Data >>= 8;
+			Offset = Buffer.writeUInt8(Number(Data & 0b11111111n), Offset);
+			Data >>= 8n;
 		}
 
 		return Buffer.writeUInt8(Negative ? 1 : 0, Offset);
 	},
 
 	["Calculate"]: function(Data) {
-		return 2 + FastLog2(Data) + 1 + 1;
+		return 2 + Number(FastLog2(Data)) + 1 + 1;
 	}
 };

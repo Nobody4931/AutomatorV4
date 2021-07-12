@@ -26,7 +26,7 @@ export class AutoArray {
 	}
 
 	Calculate(Data) {
-		let Bytes = 0;
+		let Bytes = this.SizeT.Calculate(Data.length);
 		for (const Element of Data)
 			Bytes += this.Struct.Calculate(Element);
 		return Bytes;
