@@ -1,10 +1,14 @@
 // TODO: Now make the actual userdata / ticketdata / etc. as a wrapper for my datastore library
+// TODO: Fix Memory Collectors - Multiple callbacks for collection will break it
+// TODO: Load Userdata for all users on READY - Meaning add a Memory Collector that fires when all users have been cached
 import Fs from "fs";
 
 import * as Options from "./config.js";
 import * as Socket from "./modules/api/socket.js";
 import * as Memory from "./modules/client/memory.js";
 import * as Dispatcher from "./modules/client/dispatcher.js";
+
+import * as Userdata from "./datastore/targets/users.js";
 
 import * as InteractionType from "./modules/client/enums/interaction.js";
 
