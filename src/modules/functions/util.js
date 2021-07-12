@@ -5,8 +5,6 @@ import * as Memory from "../client/memory.js";
 
 import * as DImages from "../client/wrappers/images.js";
 
-import Fs from "fs";
-
 
 export const Colors = {
 	["Red"]:     0xff0000,
@@ -34,33 +32,17 @@ export async function Sleep(Milliseconds) {
 	return new Promise((Resolve) => setTimeout(Resolve, Milliseconds));
 }
 
-export function BufferFromFile(Path, Options) {
-	let FileText = Fs.readFileSync(Path, Options);
-	let FileData = Buffer.alloc(FileText.length);
-
-	for (let I = 0; I < FileText.length; ++I)
-		FileData.writeUInt8(FileText.charCodeAt(I), I);
-
-	return FileData;
-}
-
-export function ReadString16(Buffer, Offset = 0) {
-	let Result = "";
-
-	while (true) {
-		let CharCode = Buffer.readUInt16LE(Offset); Offset += 2;
-		if (CharCode == 0) break;
-		Result += String.fromCharCode(CharCode);
+export function FastLog2(Value) {
+	let Result = 0n, I, V;
+	for (I = 1n; Value >> (1n << I); I <<= 1n);
+	while (Value > 1n) {
+		V = 1n << --I;
+		if (Value >> V) {
+			Result += V;
+			Value >>= V;
+		}
 	}
-
-	return [ Result, Offset ];
-}
-
-export function WriteString16(Buffer, Data, Offset = 0) {
-	for (let I = 0; I < Data.length; ++I)
-		Offset = Buffer.writeUInt16LE(Data.charCodeAt(I), Offset);
-	Offset = Buffer.writeUInt16LE(0, Offset);
-	return Offset;
+	return Result;
 }
 
 // https://discord.com/developers/docs/reference#message-formatting
