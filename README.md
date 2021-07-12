@@ -4,8 +4,6 @@ now using raw discord api
 
 ## todo
 * create datastore
-	* src/datastore/bot.js
-	* db/bot.auto
 
 ## questions ive literally never been asked before
 
