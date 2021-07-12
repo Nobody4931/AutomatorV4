@@ -1,17 +1,15 @@
 import { RandomInt } from "../modules/functions/generator.js";
 
-
-export function GenerateMask(Userdata) {
+export function Generate(Buffer) {
 	for (let I = 0; I < 64; ++I) {
-		Userdata.writeUInt8(RandomInt(1, 255), I);
+		Buffer.writeUInt8(RandomInt(1, 255), I);
 	}
 }
 
-export function ApplyMask(Userdata) {
-	for (let I = 64; I < Userdata.byteLength; ++I) {
-		Userdata.writeUInt8(
-			Userdata.readUInt8(I) ^ Userdata.readUInt8((I + 5387) % 64),
-			I
-		);
+export function Apply(Buffer) {
+	for (let I = 64; I < Buffer.byteLength; ++I) {
+		Buffer.writeUInt8(
+			Buffer.readUInt8(I) ^ Buffer.readUInt8((I * 37) % 64),
+			I);
 	}
 }
