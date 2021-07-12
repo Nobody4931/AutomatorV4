@@ -8,6 +8,7 @@ import { AutoString, AutoBigInt } from "./datastore/datatypes/others.js";
 import { AutoArray, AutoObject } from "./datastore/datatypes/groups.js";
 
 import AutoFormat from "./datastore/base.js";
+import Fs from "fs";
 
 
 let Structure = new AutoObject({
@@ -37,3 +38,5 @@ File.Data.Thing = [
 ];
 
 File.Save();
+
+//Fs.writeFileSync("src/test.json", JSON.stringify(File.Data), { encoding: "utf8" });
