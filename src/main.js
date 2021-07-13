@@ -44,7 +44,7 @@ Dispatcher.AddHandler("READY", async () => {
 
 	for (const UserID in Memory.Users)
 		if (Memory.Users[UserID].Bot == false)
-			Routines.push(new Promise((Resolve) => Resolve(UserData.Get(UserID))));
+			Routines.push(UserData.Get(UserID));
 	await Promise.all(Routines);
 	console.log(`Loaded userdata for ${Routines.length} user(s)\n`);
 
