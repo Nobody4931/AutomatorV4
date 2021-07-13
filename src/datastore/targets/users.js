@@ -42,7 +42,7 @@ export function Load(UserID) {
 	Data[UserID].Data = {};
 
 	if (Data[UserID].Data.Name == null)
-	Data[UserID].Data.Name = "Undefined";
+	Data[UserID].Data.Name = "";
 
 	if (Data[UserID].Data.School == null)
 	Data[UserID].Data.School = 0;
