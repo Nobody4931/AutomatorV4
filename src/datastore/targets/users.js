@@ -36,7 +36,7 @@ export function Load(UserID) {
 	Data[UserID] = new AutoFormatD(
 		new AutoFormat(Path, NewStructure, false),
 		new AutoFormat(Path, OldStructure, false),
-		(OldData) => OldData).Load();
+		(OldData) => (OldData)).Load();
 
 	if (Data[UserID].Data == null)
 	Data[UserID].Data = {};
