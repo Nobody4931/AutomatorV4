@@ -25,32 +25,41 @@ Dispatcher.AddHandler("READY", async () => {
 
 	let Owner = Memory.Users[Options.OwnerID];
 	let Emojis = Object.keys(Memory.Emojis);
+	let Routines = null;
 
 	console.log(`Successfully authenticated as: ${Memory.Client.Tag} (${Memory.Client.ID})\n`);
 	console.log(`Found guild: ${Memory.Guild.Name} (${Memory.Guild.ID})`);
 	console.log(`Found owner: ${Owner.Tag} (${Owner.ID})`);
 	console.log(`Found ${Emojis.length} emoji(s): ${Emojis.join(", ")}\n`);
 
+	// Load datastores
+	Routines = [];
+	for (const UserID in Memory.Users)
+		if (Memory.Users[UserID].Bot == false)
+			Routines.push(new Promise((Resolve) => Resolve(Userdata.Load(UserID))));
+	await Promise.all(Routines);
+	console.log(`Loaded userdata for ${Routines.length} user(s)\n`);
+
 	// Unregister old commands
+	Routines = [];
 	let CommandData = await DCommands.GetGuilds();
-	let Unregisters = [];
 	for (const Command of CommandData.data)
-		Unregisters.push(DCommands.DeleteGuild(Command.id));
-	await Promise.all(Unregisters);
-	console.log(`Unregistered ${Unregisters.length} old command(s)`);
+		Routines.push(DCommands.DeleteGuild(Command.id));
+	await Promise.all(Routines);
+	console.log(`Unregistered ${Routines.length} old command(s)`);
 
 	// Register new commands
-	let Registers = [];
+	Routines = [];
 	for (const CmdDir of Fs.readdirSync("src/commands")) {
 		let CommandMeta = await import(`./commands/${CmdDir}/command.js`);
-		Registers.push(DCommands.CreateGuild(CommandMeta.Structure).then((CommandData) => {
+		Routines.push(DCommands.CreateGuild(CommandMeta.Structure).then((CommandData) => {
 			Commands[CommandData.data.id] = CommandMeta.Invoke;
 			console.log(`Registered command '${CommandMeta.Structure.name}'`);
 		}));
 	}
 
-	await Promise.all(Registers);
-	console.log(`Registered ${Registers.length} command(s)`);
+	await Promise.all(Routines);
+	console.log(`Registered ${Routines.length} command(s)`);
 });
 
 /* Command Handler */
