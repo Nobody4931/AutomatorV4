@@ -33,33 +33,33 @@ export var Loaded = false;
 export function Load(UserID) {
 	let Path = `db/users/${UserID}.auto`;
 
-	Data[UserID] = new AutoFormatD(
+	return Data[UserID] = new AutoFormatD(
 		new AutoFormat(Path, NewStructure, false),
 		new AutoFormat(Path, OldStructure, false),
-		(OldData) => (OldData)).Load();
+		(OldData) => {
+			if (OldData == null)
+				OldData = {};
 
-	if (Data[UserID].Data == null)
-	Data[UserID].Data = {};
+			if (OldData.Name == null)
+				OldData.Name = "";
 
-	if (Data[UserID].Data.Name == null)
-	Data[UserID].Data.Name = "";
+			if (OldData.School == null)
+				OldData.School = 0;
 
-	if (Data[UserID].Data.School == null)
-	Data[UserID].Data.School = 0;
+			if (OldData.Year == null)
+				OldData.Year = 0;
 
-	if (Data[UserID].Data.Year == null)
-	Data[UserID].Data.Year = 0;
+			if (OldData.Modifiers == null)
+				OldData.Modifiers = [];
 
-	if (Data[UserID].Data.Modifiers == null)
-	Data[UserID].Data.Modifiers = [];
+			if (OldData.Rank == null)
+				OldData.Rank = 0;
 
-	if (Data[UserID].Data.Rank == null)
-	Data[UserID].Data.Rank = 0;
+			if (OldData.Color == null)
+				OldData.Color = 0;
 
-	if (Data[UserID].Data.Color == null)
-	Data[UserID].Data.Color = 0;
-
-	return Data[UserID].Save();
+			return OldData;
+		}).Load().Save();
 }
 
 export async function Get(UserID) {
