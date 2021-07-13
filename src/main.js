@@ -5,6 +5,7 @@ import * as Socket from "./modules/api/socket.js";
 import * as Memory from "./modules/client/memory.js";
 import * as Dispatcher from "./modules/client/dispatcher.js";
 
+import * as TicketData from "./datastore/targets/tickets.js";
 import * as UserData from "./datastore/targets/users.js";
 
 import * as InteractionType from "./modules/client/enums/interaction.js";
@@ -33,6 +34,8 @@ Dispatcher.AddHandler("READY", async () => {
 	Routines = [];
 
 	// TODO: TicketData
+	await TicketData.Get();
+	console.log(`Loaded ticket data`);
 
 	// TODO: SchoolData
 
@@ -46,7 +49,7 @@ Dispatcher.AddHandler("READY", async () => {
 		if (Memory.Users[UserID].Bot == false)
 			Routines.push(UserData.Get(UserID));
 	await Promise.all(Routines);
-	console.log(`Loaded userdata for ${Routines.length} user(s)\n`);
+	console.log(`Loaded user data for ${Routines.length} user(s)\n`);
 
 	// Unregister old commands
 	Routines = [];
