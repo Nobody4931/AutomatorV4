@@ -1,8 +1,8 @@
 // NOTE: IDs are snowflakes (strings) because idk discords on drugs or something
 
-// TODO: might add bans later
-// 			* if so, disable ban/kick commands from other bots
-// 			* and also create custom ban/kick commands
+// TODO: Might add ban caching later
+// 			* Meaning: Disable all ban/kick commands on other bots
+// 			* and create custom ones for Automator
 
 import * as Options from "../../config.js";
 
@@ -12,36 +12,37 @@ export const Roles    = {};
 export const Channels = {};
 export const Members  = {};
 export const Users    = {};
-//export const Bans     = {};
 export const Emojis   = {};
 
-var ClientCallback   = null;
-var GuildCallback    = null;
-var RoleCallbacks    = [];
-var ChannelCallbacks = [];
-var MemberCallbacks  = [];
-var UserCallbacks    = [];
-//var BanCallbacks     = [];
-var EmojiCallbacks   = [];
-var EmojisCallback   = null;
-var EmojisLoaded     = false;
+var ClientCB     = []; // probably a much better way of doing this
+var GuildCB      = []; // but screw it
+var EmojisCB     = [];
+var ClientLoaded = false;
+var GuildLoaded  = false;
+var EmojisLoaded = false;
 
 
 /* Save Functions */
-export async function SaveClient(Data) {
+export function SaveClient(Data) {
 	// https://discord.com/developers/docs/resources/user#user-object
+	ClientLoaded = false;
+
 	Client.ID = Data.id;
 	Client.Username = Data.username;
 	Client.Discriminator = Data.discriminator;
 	Client.Tag = `${Data.username}#${Data.discriminator}`;
 	Client.Avatar = Data.avatar;
 
-	if (ClientCallback != null)
-		ClientCallback();
+	ClientLoaded = true;
+	for (const Callback of ClientCB)
+		Callback();
+	ClientCB = [];
 }
 
-export async function SaveGuild(Data) {
+export function SaveGuild(Data) {
 	// https://discord.com/developers/docs/resources/guild#guild-object
+	GuildLoaded = false;
+
 	Guild.ID = Data.id;
 	Guild.Name = Data.name;
 	Guild.Owner = Data.owner_id;
@@ -59,11 +60,13 @@ export async function SaveGuild(Data) {
 	if (Data.members != null) for (const Member of Data.members)
 		SaveMember(Member);
 
-	if (GuildCallback != null)
-		GuildCallback();
+	GuildLoaded = true;
+	for (const Callback of GuildCB)
+		Callback();
+	GuildCB = [];
 }
 
-export async function SaveRole(Data) {
+export function SaveRole(Data) {
 	// https://discord.com/developers/docs/topics/permissions#role-object
 	Roles[Data.id] = {};
 	Roles[Data.id].ID = Data.id;
@@ -76,17 +79,10 @@ export async function SaveRole(Data) {
 	Roles[Data.id].BoostRole = Data.tags?.premium_subscriber ?? false;
 	Roles[Data.id].Permissions = parseInt(Data.permissions);
 
-	for (const I in RoleCallbacks) {
-		if (RoleCallbacks[I][0](Roles[Data.id]) == true) {
-			RoleCallbacks[I][1](Roles[Data.id]);
-			RoleCallbacks.splice(I, 1);
-		}
-	}
-
 	return Roles[Data.id];
 }
 
-export async function SaveChannel(Data) {
+export function SaveChannel(Data) {
 	// https://discord.com/developers/docs/resources/channel#channel-object
 	Channels[Data.id] = {};
 	Channels[Data.id].ID = Data.id;
@@ -105,17 +101,10 @@ export async function SaveChannel(Data) {
 		return Overwrite;
 	});
 
-	for (const I in ChannelCallbacks) {
-		if (ChannelCallbacks[I][0](Channels[Data.id]) == true) {
-			ChannelCallbacks[I][1](Channels[Data.id]);
-			ChannelCallbacks.splice(I, 1);
-		}
-	}
-
 	return Channels[Data.id];
 }
 
-export async function SaveMember(Data) {
+export function SaveMember(Data) {
 	// https://discord.com/developers/docs/resources/guild#guild-member-object
 	if (Data.user == null) return;
 	if (Data.user.id == Options.AppID) return SaveClient(Data.user);
@@ -131,17 +120,10 @@ export async function SaveMember(Data) {
 
 	SaveUser(Data.user);
 
-	for (const I in MemberCallbacks) {
-		if (MemberCallbacks[I][0](Members[Data.user.id]) == true) {
-			MemberCallbacks[I][1](Members[Data.user.id]);
-			MemberCallbacks.splice(I, 1);
-		}
-	}
-
 	return Members[Data.user.id];
 }
 
-export async function SaveUser(Data) {
+export function SaveUser(Data) {
 	// https://discord.com/developers/docs/resources/user#user-object
 	if (Data.id == Options.AppID) return SaveClient(Data);
 
@@ -154,17 +136,10 @@ export async function SaveUser(Data) {
 	Users[Data.id].Bot = Data.bot ?? false;
 	Users[Data.id].System = Data.system ?? false;
 
-	for (const I in UserCallbacks) {
-		if (UserCallbacks[I][0](Users[Data.id]) == true) {
-			UserCallbacks[I][1](Users[Data.id]);
-			UserCallbacks.splice(I, 1);
-		}
-	}
-
 	return Users[Data.id];
 }
 
-export async function SaveEmoji(Data) {
+export function SaveEmoji(Data) {
 	// https://discord.com/developers/docs/resources/emoji#emoji-object
 	EmojisLoaded = false;
 
@@ -180,54 +155,28 @@ export async function SaveEmoji(Data) {
 		Emojis[Emoji.name].Colons = Emoji.require_colons ?? false;
 		Emojis[Emoji.name].Animated = Emoji.animated ?? false;
 		Emojis[Emoji.name].Available = Emoji.available ?? false;
-
-		for (const I in EmojiCallbacks) {
-			if (EmojiCallbacks[I][0](Emojis[Emoji.name]) == true) {
-				EmojiCallbacks[I][1](Emojis[Emoji.name]);
-				EmojiCallbacks.splice(I, 1);
-			}
-		}
 	}
 
 	EmojisLoaded = true;
-	if (EmojisCallback != null)
-		EmojisCallback();
+	for (const Callback of EmojisCB)
+		Callback();
+	EmojisCB = [];
 }
 
 /* Collection Functions */
-function GenerateTimeoutCollector(Group, GroupCallbacks) {
-	return async function(Filter, Timeout = null) {
-		return new Promise((Resolve) => {
-			for (const Item of Object.values(Group))
-				if (Filter(Item) == true)
-					return Resolve(Item);
-
-			let Callback = [ Filter, Resolve ];
-			Timeout != null && setTimeout(() => {
-				let Index = GroupCallbacks.findIndex((CB) => (CB == Callback));
-				if (Index != -1)
-					GroupCallbacks.splice(Index, 1);
-				Resolve(null);
-			}, Timeout);
-
-			GroupCallbacks.push(Callback);
-		});
-	}
-}
-
 export async function CollectClient() {
 	return new Promise((Resolve) => {
-		if (Client.ID != null)
+		if (ClientLoaded == true)
 			return Resolve();
-		ClientCallback = Resolve;
+		ClientCB.push(Resolve);
 	});
 }
 
 export async function CollectGuild() {
 	return new Promise((Resolve) => {
-		if (Guild.ID != null)
+		if (GuildLoaded == true)
 			return Resolve();
-		GuildCallback = Resolve;
+		GuildCB.push(Resolve);
 	});
 }
 
@@ -235,12 +184,23 @@ export async function CollectEmojis() {
 	return new Promise((Resolve) => {
 		if (EmojisLoaded == true)
 			return Resolve();
-		EmojisCallback = Resolve;
+		EmojisCB.push(Resolve);
 	});
 }
 
-export const CollectRole = GenerateTimeoutCollector(Roles, RoleCallbacks);
-export const CollectChannel = GenerateTimeoutCollector(Channels, ChannelCallbacks);
-export const CollectMember = GenerateTimeoutCollector(Members, MemberCallbacks);
-export const CollectUser = GenerateTimeoutCollector(Users, UserCallbacks);
-export const CollectEmoji = GenerateTimeoutCollector(Emojis, EmojiCallbacks);
+/* Searching Functions */
+function GenFindFunction(Group) {
+	return function(Filter) {
+		for (const ID in Group) {
+			if (Filter(Group[ID]) == true) {
+				return Group[ID];
+			}
+		}
+	}
+}
+
+export const FindRole    = GenFindFunction(Roles);
+export const FindChannel = GenFindFunction(Channels);
+export const FindMember  = GenFindFunction(Members);
+export const FindUser    = GenFindFunction(Users);
+export const FindEmoji   = GenFindFunction(Emojis);

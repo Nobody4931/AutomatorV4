@@ -23,7 +23,7 @@ Dispatcher.AddHandler("READY", async () => {
 	await Memory.CollectGuild();
 	await Memory.CollectEmojis();
 
-	let Owner = await Memory.CollectUser((User) => (User.ID == Options.OwnerID));
+	let Owner = Memory.Users[Options.OwnerID];
 	let Emojis = Object.keys(Memory.Emojis);
 
 	console.log(`Successfully authenticated as: ${Memory.Client.Tag} (${Memory.Client.ID})\n`);
