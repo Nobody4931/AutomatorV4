@@ -1,6 +1,4 @@
 // TODO: Now make the actual userdata / ticketdata / etc. as a wrapper for my datastore library
-// TODO: Fix Memory Collectors - Multiple callbacks for collection will break it
-// TODO: Load Userdata for all users on READY - Meaning add a Memory Collector that fires when all users have been cached
 import Fs from "fs";
 
 import * as Options from "./config.js";
@@ -8,7 +6,7 @@ import * as Socket from "./modules/api/socket.js";
 import * as Memory from "./modules/client/memory.js";
 import * as Dispatcher from "./modules/client/dispatcher.js";
 
-import * as Userdata from "./datastore/targets/users.js";
+import * as UserData from "./datastore/targets/users.js";
 
 import * as InteractionType from "./modules/client/enums/interaction.js";
 
@@ -34,14 +32,26 @@ Dispatcher.AddHandler("READY", async () => {
 
 	// Load datastores
 	Routines = [];
+
+	// TODO: TicketData
+
+	// TODO: SchoolData
+
+	// TODO: YearData
+
+	// TODO: ModifierData
+
+	// TODO: ColorData
+
 	for (const UserID in Memory.Users)
 		if (Memory.Users[UserID].Bot == false)
-			Routines.push(new Promise((Resolve) => Resolve(Userdata.Load(UserID))));
+			Routines.push(new Promise((Resolve) => Resolve(UserData.Load(UserID))));
 	await Promise.all(Routines);
 	console.log(`Loaded userdata for ${Routines.length} user(s)\n`);
 
 	// Unregister old commands
 	Routines = [];
+
 	let CommandData = await DCommands.GetGuilds();
 	for (const Command of CommandData.data)
 		Routines.push(DCommands.DeleteGuild(Command.id));
@@ -50,6 +60,7 @@ Dispatcher.AddHandler("READY", async () => {
 
 	// Register new commands
 	Routines = [];
+
 	for (const CmdDir of Fs.readdirSync("src/commands")) {
 		let CommandMeta = await import(`./commands/${CmdDir}/command.js`);
 		Routines.push(DCommands.CreateGuild(CommandMeta.Structure).then((CommandData) => {
