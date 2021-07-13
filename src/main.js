@@ -1,4 +1,3 @@
-// TODO: Now make the actual userdata / ticketdata / etc. as a wrapper for my datastore library
 import Fs from "fs";
 
 import * as Options from "./config.js";
@@ -45,7 +44,7 @@ Dispatcher.AddHandler("READY", async () => {
 
 	for (const UserID in Memory.Users)
 		if (Memory.Users[UserID].Bot == false)
-			Routines.push(new Promise((Resolve) => Resolve(UserData.Load(UserID))));
+			Routines.push(new Promise((Resolve) => Resolve(UserData.Get(UserID))));
 	await Promise.all(Routines);
 	console.log(`Loaded userdata for ${Routines.length} user(s)\n`);
 
