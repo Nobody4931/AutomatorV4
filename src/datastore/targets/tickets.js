@@ -39,6 +39,6 @@ export async function Get() {
 }
 
 /* Initialize Data */
-setInterval(Data.Save, Options.SaveTime);
+setInterval(Data.Save.bind(Data), Options.SaveTime);
 
 Loaded = true;
