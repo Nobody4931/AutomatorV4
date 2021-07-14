@@ -36,22 +36,12 @@ Dispatcher.AddHandler("READY", async () => {
 
 	// Load datastores
 	Routines = [];
+	for (const Datastore of [ TicketData, SchoolData, YearData, ModifierData, ColorData ])
+		Routines.push(Datastore.Get());
+	await Promise.all(Routines);
+	console.log(`Loaded ${Routines.length} datastore(s)`);
 
-	await TicketData.Get();
-	console.log(`Loaded ticket data`);
-
-	await SchoolData.Get();
-	console.log(`Loaded school data`);
-
-	await YearData.Get();
-	console.log(`Loaded year data`);
-
-	await ModifierData.Get();
-	console.log(`Loaded modifier data`);
-
-	await ColorData.Get();
-	console.log(`Loaded color data`);
-
+	Routines = [];
 	for (const UserID in Memory.Users)
 		if (Memory.Users[UserID].Bot == false)
 			Routines.push(UserData.Get(UserID));
@@ -60,7 +50,6 @@ Dispatcher.AddHandler("READY", async () => {
 
 	// Unregister old commands
 	Routines = [];
-
 	let CommandData = await DCommands.GetGuilds();
 	for (const Command of CommandData.data)
 		Routines.push(DCommands.DeleteGuild(Command.id));
@@ -69,7 +58,6 @@ Dispatcher.AddHandler("READY", async () => {
 
 	// Register new commands
 	Routines = [];
-
 	for (const CmdDir of Fs.readdirSync("src/commands")) {
 		let CommandMeta = await import(`./commands/${CmdDir}/command.js`);
 		Routines.push(DCommands.CreateGuild(CommandMeta.Structure).then((CommandData) => {
