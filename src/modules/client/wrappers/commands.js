@@ -63,5 +63,26 @@ export async function DeleteGuild(CommandID, Data, Headers) {
 	return Response;
 }
 
-// TODO: Add support for command permissions to keep admin-only commands away from nerds
-// 		* https://discord.com/developers/docs/interactions/slash-commands#get-guild-application-command-permissions
+export async function GetPermissionsAll(Data, Headers) {
+	let Response = await DAPI.GETRequestA(`applications/${Options.AppID}/guilds/${Options.GuildID}/commands/permissions`, Data, Headers);
+	if (HttpOP.IsValidStatus(Response.status) == false) throw `HTTP_ERROR: ${Response.statusText}`;
+	return Response;
+}
+
+export async function GetPermissions(CommandID, Data, Headers) {
+	let Response = await DAPI.GETRequestA(`applications/${Options.AppID}/guilds/${Options.GuildID}/commands/${CommandID}/permissions`, Data, Headers);
+	if (HttpOP.IsValidStatus(Response.status) == false) throw `HTTP_ERROR: ${Response.statusText}`;
+	return Response;
+}
+
+export async function EditPermissions(CommandID, Data, Headers) {
+	let Response = await DAPI.PUTRequestA(`applications/${Options.AppID}/guilds/${Options.GuildID}/commands/${CommandID}/permissions`, Data, Headers);
+	if (HttpOP.IsValidStatus(Response.status) == false) throw `HTTP_ERROR: ${Response.statusText}`;
+	return Response;
+}
+
+export async function EditPermissionsAll(Data, Headers) {
+	let Response = await DAPI.PUTRequestA(`applications/${Options.AppID}/guilds/${Options.GuildID}/commands/permissions`, Data, Headers);
+	if (HttpOP.IsValidStatus(Response.status) == false) throw `HTTP_ERROR: ${Response.statusText}`;
+	return Response;
+}
