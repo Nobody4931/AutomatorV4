@@ -6,6 +6,10 @@ import * as Memory from "./modules/client/memory.js";
 import * as Dispatcher from "./modules/client/dispatcher.js";
 
 import * as TicketData from "./datastore/targets/tickets.js";
+import * as SchoolData from "./datastore/targets/schools.js";
+import * as YearData from "./datastore/targets/years.js";
+import * as ModifierData from "./datastore/targets/modifiers.js";
+import * as ColorData from "./datastore/targets/colors.js";
 import * as UserData from "./datastore/targets/users.js";
 
 import * as InteractionType from "./modules/client/enums/interaction.js";
@@ -33,17 +37,20 @@ Dispatcher.AddHandler("READY", async () => {
 	// Load datastores
 	Routines = [];
 
-	// TODO: TicketData
 	await TicketData.Get();
 	console.log(`Loaded ticket data`);
 
-	// TODO: SchoolData
+	await SchoolData.Get();
+	console.log(`Loaded school data`);
 
-	// TODO: YearData
+	await YearData.Get();
+	console.log(`Loaded year data`);
 
-	// TODO: ModifierData
+	await ModifierData.Get();
+	console.log(`Loaded modifier data`);
 
-	// TODO: ColorData
+	await ColorData.Get();
+	console.log(`Loaded color data`);
 
 	for (const UserID in Memory.Users)
 		if (Memory.Users[UserID].Bot == false)
