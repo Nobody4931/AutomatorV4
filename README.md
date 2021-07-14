@@ -3,7 +3,7 @@ the coolest private discord management bot ever made \
 now using raw discord api
 
 ## todo
-* create datastore
+* use discords command permission api to handle command usage
 
 ## questions ive literally never been asked before
 
