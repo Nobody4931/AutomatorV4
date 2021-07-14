@@ -15,6 +15,7 @@ import * as Options from "../../config.js";
 
 const NewStructure = new AutoObject({
 	Name: AutoString,
+	Special: AutoUInt8,
 	Role: AutoUInt64
 });
 
