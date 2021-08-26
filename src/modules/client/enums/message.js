@@ -1,27 +1,27 @@
 // Message Type
 // https://discord.com/developers/docs/resources/channel#message-object-message-types
-export const DEFAULT                                      = 0;
-export const RECIPIENT_ADD                                = 1;
-export const RECIPIENT_REMOVE                             = 2;
-export const CALL                                         = 3;
-export const CHANNEL_NAME_CHANGE                          = 4;
-export const CHANNEL_ICON_CHANGE                          = 5;
-export const CHANNEL_PINNED_MESSAGE                       = 6;
-export const GUILD_MEMBER_JOIN                            = 7;
-export const USER_PREMIUM_GUILD_SUBSCRIPTION              = 8;
-export const USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_1       = 9;
-export const USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_2       = 10;
-export const USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_3       = 11;
-export const CHANNEL_FOLLOW_ADD                           = 12;
-export const GUILD_DISCOVERY_DISQUALIFIED                 = 14;
-export const GUILD_DISCOVERY_REQUALIFIED                  = 15;
-export const GUILD_DISCOVERY_GRACE_PERIOD_INITIAL_WARNING = 16;
-export const GUILD_DISCOVERY_GRACE_PERIOD_FINAL_WARNING   = 17;
-export const THREAD_CREATED                               = 18;
-export const REPLY                                        = 19;
-export const APPLICATION_COMMAND                          = 20;
-export const THREAD_STARTER_MESSAGE                       = 21;
-export const GUILD_INVITE_REMINDER                        = 22;
+export const MSG_DEFAULT = 0;
+export const MSG_RECIPIENT_ADD = 1;
+export const MSG_RECIPIENT_REMOVE = 2;
+export const MSG_CALL = 3;
+export const MSG_CHANNEL_NAME_CHANGE = 4;
+export const MSG_CHANNEL_ICON_CHANGE = 5;
+export const MSG_CHANNEL_PINNED_MESSAGE = 6;
+export const MSG_GUILD_MEMBER_JOIN = 7;
+export const MSG_USER_PREMIUM_GUILD_SUBSCRIPTION = 8;
+export const MSG_USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_1 = 9;
+export const MSG_USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_2 = 10;
+export const MSG_USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_3 = 11;
+export const MSG_CHANNEL_FOLLOW_ADD = 12;
+export const MSG_GUILD_DISCOVERY_DISQUALIFIED = 14;
+export const MSG_GUILD_DISCOVERY_REQUALIFIED = 15;
+export const MSG_GUILD_DISCOVERY_GRACE_PERIOD_INITIAL_WARNING = 16;
+export const MSG_GUILD_DISCOVERY_GRACE_PERIOD_FINAL_WARNING = 17;
+export const MSG_THREAD_CREATED = 18;
+export const MSG_REPLY = 19;
+export const MSG_APPLICATION_COMMAND = 20;
+export const MSG_THREAD_STARTER_MESSAGE = 21;
+export const MSG_GUILD_INVITE_REMINDER = 22;
 
 // Message Flags
 // https://discord.com/developers/docs/resources/channel#message-object-message-flags
