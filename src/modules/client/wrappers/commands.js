@@ -1,4 +1,4 @@
-// https://discord.com/developers/docs/interactions/slash-commands
+// https://discord.com/developers/docs/interactions/application-commands
 import * as DAPI from "../../api/api.js";
 import * as HttpOP from "../../api/enums/http.js";
 import * as Options from "../../../config.js";
@@ -86,3 +86,7 @@ export async function EditPermissionsAll(Data, Headers) {
 	if (HttpOP.IsValidStatus(Response.status) == false) throw `HTTP_ERROR: ${Response.statusText}`;
 	return Response;
 }
+
+// TODO: Maybe bulk editing?
+// SEE: https://discord.com/developers/docs/interactions/application-commands#bulk-overwrite-global-application-commands
+// SEE: https://discord.com/developers/docs/interactions/application-commands#bulk-overwrite-guild-application-commands
