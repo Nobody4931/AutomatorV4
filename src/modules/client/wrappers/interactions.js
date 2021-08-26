@@ -1,4 +1,4 @@
-// https://discord.com/developers/docs/interactions/slash-commands
+// https://discord.com/developers/docs/interactions/receiving-and-responding
 import * as DAPI from "../../api/api.js";
 import * as HttpOP from "../../api/enums/http.js";
 import * as Options from "../../../config.js";
