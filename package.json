@@ -14,7 +14,7 @@
 		"url": "https://github.com/Nobody4931/AutomatorV4.git"
 	},
 	"dependencies": {
-		"axios": "^0.21.1",
+		"axios": "^0.27.0",
 		"dotenv": "^10.0.0",
 		"ws": "^8.2.0"
 	},
