@@ -15,3 +15,5 @@ This involves:
 The code on this repository is unfinished because back in middle/high school when I wrote this app, I was solely working by myself, so I didn't have the foresight to commit my changes to GitHub, which I now regret, as a lot of my old projects have been lost.
 
 The full code to Automator v3 is available [here](https://github.com/Nobody4931/AutomatorV3), but be warned as the code is very unorganized. However, it serves as a very good visualization of the improvement in my skills between major versions.
+
+The code to Automator v5 is still closed-source, as it is still under development and in use as of now. This may change in the future.
